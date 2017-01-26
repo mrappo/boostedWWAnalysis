@@ -8,10 +8,10 @@ parser = OptionParser()
 parser.add_option('-c', '--channel',action="store",type="string",dest="channel",default="em")
 parser.add_option('--ntuple', action="store",type="string",dest="ntuple",default="WWTree_22sep_jecV7_lowmass")
 parser.add_option('--category', action="store",type="string",dest="category",default="HP")
-parser.add_option('--lumi', action="store",type="float",dest="lumi",default=2300)
+parser.add_option('--lumi', action="store",type="float",dest="lumi",default=2300.0)
 #parser.add_option('--jetalgo', action="store",type="string",dest="jetalgo",default="jet_mass_pr")
 #parser.add_option('--interpolate', action="store_true",dest="interpolate",default=False)
-#parser.add_option('--batchMode', action="store_true",dest="batchMode",default=False)
+parser.add_option('--batchMode', action="store_true",dest="batchMode",default=True)
 parser.add_option('--vbf', action="store_true",dest="vbf",default=True)
 parser.add_option('--pseudodata', action="store_true",dest="pseudodata",default=False)
 parser.add_option('--copyDC', action="store_true",dest="copyDC",default=True)
@@ -27,7 +27,7 @@ currentDir = os.getcwd();
 
 #Ntuple_Path_lxplus="/afs/cern.ch/user/l/lbrianza/work/public/%s/"%options.ntuple
 Samples=["BulkGraviton","Higgs"];
-Lumi_float_true=2300;
+Lumi_float_true=options.lumi;
 Luminosities=[Lumi_float_true];
 Channel=options.channel;
 
@@ -100,7 +100,7 @@ def print_lined_string_File(in_string_vector,out_file):
     for k in range(offset):
         line_zero=line_zero+" ";
     
-
+    #out_file = open(in_FileName,'a'); 
     out_file.write("\n"+line_empty);
     out_file.write("\n"+line_empty);
     print line_empty
@@ -148,7 +148,7 @@ def print_lined_string_File(in_string_vector,out_file):
     
     print final_line
     print line_empty
-
+    #out_file.close();
 
 
 
@@ -158,6 +158,9 @@ def print_lined_string_File(in_string_vector,out_file):
 
 
 def print_boxed_string_File(in_string_vector,out_file):
+    
+    
+    #out_file = open(in_FileName,'a');
     
     offset_1=3;
     offset_2=4;
@@ -247,7 +250,7 @@ def print_boxed_string_File(in_string_vector,out_file):
     print line_ext
     print "\n\n"
 
-
+    #out_file.close();
 
 
 
@@ -268,8 +271,9 @@ if __name__ == '__main__':
 
     Ntuple_dir_name="Ntuple_%s"%(options.ntuple)
     if not os.path.isdir(Ntuple_dir_name):
-           os.system("mkdir "+Ntuple_dir_name);
-   
+           #os.system("mkdir "+Ntuple_dir_name);
+           pd1 = subprocess.Popen(['mkdir',Ntuple_dir_name]);
+           pd1.wait();
     
     
     ##### VBF PROCESS
@@ -290,27 +294,35 @@ if __name__ == '__main__':
                if options.pseudodata:
                   pseudodata_dir=Ntuple_dir_name+"/pseudoData"
                   if not os.path.isdir(pseudodata_dir):
-                         os.system("mkdir "+pseudodata_dir);
-                           
-                  datacards_dir_in="../../../CMSSW_5_3_13/src/EXOVVFitter/pseudoData/Ntuple_%s/Lumi_%s_VBF/DEta%1.1f_Mjj_%.0f/cards_%s_%s_VBF"%(options.ntuple,lumi_str,options.channel,CutValue[0],CutValue[1],options.category,sample);
+                         #os.system("mkdir "+pseudodata_dir);
+                         pd2P = subprocess.Popen(['mkdir',pseudodata_dir]);
+                         pd2P.wait();
+                             
+                  datacards_dir_in="../../../CMSSW_5_3_13/src/EXOVVFitter/pseudoData/Ntuple_%s/Lumi_%s_VBF/DEta%1.3f_Mjj_%.0f/cards_%s_%s_VBF"%(options.ntuple,lumi_str,options.channel,CutValue[0],CutValue[1],options.category,sample);
                   lumi_dir=Ntuple_dir_name+"/pseudoData/Lumi_%s_VBF"%lumi_str;
                   if not os.path.isdir(lumi_dir):
-                         os.system("mkdir "+lumi_dir);
+                         #os.system("mkdir "+lumi_dir);
+                         pd2PL = subprocess.Popen(['mkdir',lumi_dir]);
+                         pd2PL.wait();
              
              
                else:
                   truedata_dir=Ntuple_dir_name+"/trueData"
                   if not os.path.isdir(truedata_dir):
-                         os.system("mkdir "+truedata_dir);
+                         #os.system("mkdir "+truedata_dir);
+                         pd2T = subprocess.Popen(['mkdir',truedata_dir]);
+                         pd2T.wait();
           
                   #../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_WWTree_22sep_jecV7_lowmass/trueData/Lumi_2300_VBF/
-                  datacards_dir_in="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/trueData/Lumi_%s_VBF/DEta%1.1f_Mjj_%.0f/cards_%s_%s_VBF/"%(options.ntuple,lumi_str,CutValue[0],CutValue[1],options.channel,options.category);
-                  lumi_dir=Ntuple_dir_name+"/trueData/Lumi_%s_VBF/"%lumi_str;
+                  datacards_dir_in="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/trueData/Lumi_%s_VBF/DEta%1.3f_Mjj_%.0f/cards_%s_%s_VBF"%(options.ntuple,lumi_str,CutValue[0],CutValue[1],options.channel,options.category);
+                  lumi_dir=Ntuple_dir_name+"/trueData/Lumi_%s_VBF"%lumi_str;
                   if not os.path.isdir(lumi_dir):
-                         os.system("mkdir "+lumi_dir);
+                         #os.system("mkdir "+lumi_dir);
+                         pd2TL = subprocess.Popen(['mkdir',lumi_dir]);
+                         pd2TL.wait();
 
   
-               datacards_dir_out=lumi_dir+"DEta%1.1f_Mjj_%.0f/"%(CutValue[0],CutValue[1]);
+               datacards_dir_out=lumi_dir+"/DEta%1.3f_Mjj_%.0f"%(CutValue[0],CutValue[1]);
                               
                if not options.copyDC:
                       if not os.path.isdir(datacards_dir_out):
@@ -320,13 +332,18 @@ if __name__ == '__main__':
         
         
                SummaryFileName=lumi_dir+"SummaryLimitsFile.txt";
+               if os.path.isfile(SummaryFileName):
+                  pRM = subprocess.Popen(['rm',SummaryFileName]);
+                  pRM.wait(); 
                SummaryFile=open(SummaryFileName, 'w+');
-        
+               SummaryFile.write("\nEVALUATING EXCLUSION LIMITS\n\n");
         
                ### COPY DATACARD
                if options.copyDC:
                   if not os.path.isdir(datacards_dir_out):
-                         os.system("mkdir "+datacards_dir_out);
+                         #os.system("mkdir "+datacards_dir_out);
+                         pd3 = subprocess.Popen(['mkdir',datacards_dir_out]);
+                         pd3.wait();
    
                   pCD = subprocess.Popen(['cp','-r',datacards_dir_in,datacards_dir_out]);
                   pCD.wait();
@@ -371,13 +388,13 @@ if __name__ == '__main__':
                        ### RENAME DATACARD
                        
                        if options.channel=="em":
-                          datacard_file_in=datacards_dir_out+"cards_%s_%s_VBF/%s/wwlvj_%s%s_%s_%s_lumi_%s_unbin.txt"%(options.channel,options.category,sample,sample,mass,options.channel,options.category,lumi_str)
-                          datacard_file_out=datacards_dir_out+"cards_%s_%s_VBF/%s/wwlvj_BulkGraviton_newxsec%s_%s_2jet_HP_unbin.txt"%(options.channel,options.category,sample,mass,options.channel)
+                          datacard_file_in=datacards_dir_out+"/cards_%s_%s_VBF/%s/wwlvj_%s%s_%s_%s_lumi_%s_unbin.txt"%(options.channel,options.category,sample,sample,mass,options.channel,options.category,lumi_str)
+                          datacard_file_out=datacards_dir_out+"/cards_%s_%s_VBF/%s/wwlvj_BulkGraviton_newxsec%s_%s_2jet_HP_unbin.txt"%(options.channel,options.category,sample,mass,options.channel)
                        
                        else:
                
-                          datacard_file_in=datacards_dir_out+"cards_%s_%s_VBF/%s/wwlvj_%s%s_%s_%s_lumi_%s_unbin.txt"%(options.channel,options.category,sample,sample,mass,options.channel,options.category,lumi_str)
-                          datacard_file_out=datacards_dir_out+"cards_%s_%s_VBF/%s/wwlvj_BulkGraviton_newxsec%s_%s_HP_unbin.txt"%(options.channel,options.category,sample,mass,options.channel)
+                          datacard_file_in=datacards_dir_out+"/cards_%s_%s_VBF/%s/wwlvj_%s%s_%s_%s_lumi_%s_unbin.txt"%(options.channel,options.category,sample,sample,mass,options.channel,options.category,lumi_str)
+                          datacard_file_out=datacards_dir_out+"/cards_%s_%s_VBF/%s/wwlvj_BulkGraviton_newxsec%s_%s_HP_unbin.txt"%(options.channel,options.category,sample,mass,options.channel)
                           
                        
               
@@ -394,27 +411,36 @@ if __name__ == '__main__':
                        
                        
                        
+                   ### Make The Final Limits    
+                   
+                   cards_dir=datacards_dir_out+"/cards_%s_%s_VBF/%s"%(options.channel,options.category,sample);
+                   
+                   tmp_string=["MAKING LIMITS",
+                               " ",
+                               "SAMPLE: %s"%sample,
+                               " ",
+                               "DEtajj: %1.3f"%CutValue[0],
+                               " ",
+                               "Mjj: %.0f"%CutValue[1],
+                               " ",
+                               "Datacard Dir: %s"%cards_dir];
+                   print_boxed_string_File(tmp_string,SummaryFile);
                        
-                       tmp_string=["MAKING LIMITS",
-                                   " ",
-                                   "SAMPLE: %s"%sample];
-                       print_boxed_string_File(tmp_string,SummaryFile);
-                       
-                       cards_dir=datacards_dir_out+"/cards_%s_%s_VBF/%s/"%(options.channel,options.category,sample);
-                       
-                       
-                       
-                       if options.channel=="em":            
-                          pMKLim = subprocess.Popen(['python','MATTEO_LimitsCode.py','-b','--computeLimits','--channel',options.channel,'--datacardDIR',cards_dir,'--makeSMLimitPlot','1','--plotLimits','1','--systematics','1','--sample',sample,'--vbf','TRUE','--blindObservedLine','1','--jetBin','_2jet']);
-                          pMKLim.wait();
-                       
-                       
-                       else:
-                          pMKLim = subprocess.Popen(['python','MATTEO_LimitsCode.py','-b','--computeLimits','--channel',options.channel,'--datacardDIR',cards_dir,'--makeSMLimitPlot','1','--plotLimits','1','--systematics','1','--sample',sample,'--vbf','TRUE','--blindObservedLine','1']);
-                          pMKLim.wait();
+                   
                        
                        
-                       '''
+                   '''   
+                   if options.channel=="em":            
+                      pMKLim = subprocess.Popen(['python','MATTEO_LimitsCode.py','-b','--computeLimits','--channel',options.channel,'--datacardDIR',cards_dir,'--makeSMLimitPlot','1','--plotLimits','1','--systematics','1','--sample',sample,'--vbf','TRUE','--blindObservedLine','1','--jetBin','_2jet']);
+                      pMKLim.wait();
+                       
+                       
+                   else:
+                      pMKLim = subprocess.Popen(['python','MATTEO_LimitsCode.py','-b','--computeLimits','--channel',options.channel,'--datacardDIR',cards_dir,'--makeSMLimitPlot','1','--plotLimits','1','--systematics','1','--sample',sample,'--vbf','TRUE','--blindObservedLine','1']);
+                      pMKLim.wait();
+                       
+                       
+                   
                        if options.channel=="em":
                           cmd="python MATTEO_runLimits.py -b --computeLimits --channel %s --datacardDIR %s --makeSMLimitPlot 1 --plotLimits 1 --systematics 1 --sample %s --vbf TRUE --jetBin _2jet "%(options.channel,cards_dir,sample)
            
@@ -423,19 +449,80 @@ if __name__ == '__main__':
            
                        print cmd
                        os.system(cmd)
-                       '''
+                   '''
                
+
+  
+  
+                   if (options.batchMode==True):
+                      
+                      log_dir=cards_dir+"/Log_VBF";
+                      if not os.path.isdir(log_dir):
+                             #os.system("mkdir "+log_dir);
+                             pd4 = subprocess.Popen(['mkdir',log_dir]);
+                             pd4.wait();
+                      
+                      logFile=log_dir+"/log_VBF_%s.txt"%sample;
+                      
+                      
+                      job_dir=cards_dir+"/Job_VBF";
+                      if not os.path.isdir(job_dir):
+                             #os.system("mkdir "+job_dir);
+                             pd5 = subprocess.Popen(['mkdir',job_dir]);
+                             pd5.wait();
+                             
+                             
+                      fn = job_dir+"/job_VBF_%s"%(sample);
+                      outScript = open(fn+".sh","w");
+ 
+                      outScript.write('#!/bin/bash');
+                      outScript.write("\n"+'cd '+currentDir);
+                      outScript.write("\n"+'eval `scram runtime -sh`');
+                      outScript.write("\n"+'export PATH=${PATH}:'+currentDir);
+                      outScript.write("\n"+'echo ${PATH}');
+                      outScript.write("\n"+'ls');
+                      
+                      
+                      if options.channel=="em":
+                                  
+                         cmd_tmp ="python MATTEO_LimitsCode.py -b --computeLimits --channel %s --datacardDIR %s --makeSMLimitPlot 1 --plotLimits 1 --systematics 1 --sample %s --vbf TRUE --blindObservedLine 1 --jetBin _2jet > "%(options.channel,cards_dir,sample);
+                                                
+                       
+                      else:
+                         cmd_tmp ="python MATTEO_LimitsCode.py -b --computeLimits --channel %s --datacardDIR %s --makeSMLimitPlot 1 --plotLimits 1 --systematics 1 --sample %s --vbf TRUE --blindObservedLine 1 > "%(options.channel,cards_dir,sample);
+                         
+
+                      cmd = cmd_tmp+logFile;
+                      outScript.write("\n"+cmd);
+                      #outScript.write("\n"+'rm *.out');
+                      outScript.close();
+                      
+                      dir_tmp1=currentDir+"/"+fn+".sh";
+                      pMKLimBatch1 = subprocess.Popen(['chmod','777',dir_tmp1]);
+                      pMKLimBatch1.wait();
+                      #os.system("chmod 777 "+currentDir+"/"+fn+".sh");
+                      
+                      
+                      pMKLimBatch2 = subprocess.Popen(['bsub','-q','cmscaf1nd','-cwd',currentDir,dir_tmp1]);
+                      pMKLimBatch2.wait();
+                      #os.system("bsub -q cmscaf1nd -cwd "+currentDir+" "+currentDir+"/"+fn+".sh");
+                      
+                   else:
+                      if options.channel=="em":            
+                         pMKLim = subprocess.Popen(['python','MATTEO_LimitsCode.py','-b','--computeLimits','--channel',options.channel,'--datacardDIR',cards_dir,'--makeSMLimitPlot','1','--plotLimits','1','--systematics','1','--sample',sample,'--vbf','TRUE','--blindObservedLine','1','--jetBin','_2jet']);
+                         pMKLim.wait();
+                       
+                       
+                      else:
+                         pMKLim = subprocess.Popen(['python','MATTEO_LimitsCode.py','-b','--computeLimits','--channel',options.channel,'--datacardDIR',cards_dir,'--makeSMLimitPlot','1','--plotLimits','1','--systematics','1','--sample',sample,'--vbf','TRUE','--blindObservedLine','1']);
+                         pMKLim.wait();
+                       
+  
+  
+  
+  
                # Close the SummaryFile
-               SummaryFile.close();
-  
-  
-  
-  
-  
-  
-  
-  
-  
+               SummaryFile.close(); 
   
   
   
