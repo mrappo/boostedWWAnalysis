@@ -282,7 +282,9 @@ if __name__ == '__main__':
        CutInputValues=readVBFCutsFile();
        CutInputNumber=CutInputValues[0];
        CutInputVector=CutInputValues[1];
-    
+       
+       #CutInputVector=[[0.0,0.0],[1.0,0.0]];
+       
        CutValue=[0.0,0.0];
        
        ## Cycle over all     

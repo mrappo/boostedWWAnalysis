@@ -311,10 +311,10 @@ BRnew = [00]
 
 ####CMS lumi
 
-cmsText     = "CMS";
+cmsText     = "";#"CMS"; # MATTEO CHANGED
 cmsTextFont   = 61  
 
-writeExtraText = True
+writeExtraText = False #true ## MATTEO CHANGED
 extraText   = "Preliminary"
 extraTextFont = 52 
 
@@ -884,8 +884,8 @@ def makeSMLimitPlot(SIGCH,cprime = 10, brnew = 00):
 
     curGraph_exp.SetLineStyle(2);
     curGraph_exp.SetLineWidth(3);
-    curGraph_exp.SetMarkerSize(2);
-    curGraph_exp.SetMarkerStyle(24);
+    curGraph_exp.SetMarkerSize(1);
+    curGraph_exp.SetMarkerStyle(20);
     curGraph_exp.SetMarkerColor(ROOT.kBlack);
 
     curGraph_1s.SetFillColor(ROOT.kGreen);
@@ -911,8 +911,13 @@ def makeSMLimitPlot(SIGCH,cprime = 10, brnew = 00):
     hrl_SM.GetYaxis().SetTitleOffset(1.35);
     hrl_SM.GetYaxis().SetTitleSize(0.045);
     hrl_SM.GetYaxis().SetTitleFont(42);
-
-    hrl_SM.GetXaxis().SetTitle("M_{G} (GeV)");
+    
+    
+    if (options.sample).find('BulkGraviton') != -1: # MATTEO CHANGED
+       hrl_SM.GetXaxis().SetTitle("M_{G} (GeV)");
+    else:
+       hrl_SM.GetXaxis().SetTitle("M_{H} (GeV)");
+    #hrl_SM.GetXaxis().SetTitle("M_{G} (GeV)");
     hrl_SM.GetXaxis().SetTitleSize(0.045);
     hrl_SM.GetXaxis().SetTitleFont(42);
 
@@ -927,10 +932,10 @@ def makeSMLimitPlot(SIGCH,cprime = 10, brnew = 00):
     if not options.blindObservedLine : curGraph_obs.Draw("PCsame"); # MATTEO CHANGED
     #curGraph_obs.Draw("PCsame");
     
-    curGraph_exp.Draw("Csame");
-    oneLine.Draw("same");
+    curGraph_exp.Draw("LPsame");
+    oneLine.Draw("LPsame");
 
-    leg2 = ROOT.TLegend(0.3,0.72,0.75,0.9);
+    leg2 = ROOT.TLegend(0.47,0.77,0.93,0.93);
     leg2.SetFillColor(0);
     leg2.SetShadowColor(0);
     leg2.SetTextFont(42);
@@ -943,7 +948,8 @@ def makeSMLimitPlot(SIGCH,cprime = 10, brnew = 00):
                                        
     if not options.blindObservedLine:     leg2.AddEntry(curGraph_obs,"Asympt. CL_{S} Observed","LP") # MATTEO CHANGED
     #leg2.AddEntry(curGraph_obs,"Asympt. CL_{S} Observed","LP")
-
+    
+    
     can_SM.Update();
     can_SM.RedrawAxis();
     can_SM.RedrawAxis("g");
@@ -967,13 +973,14 @@ def makeSMLimitPlot(SIGCH,cprime = 10, brnew = 00):
     label_sqrt.SetTextSize(0.03);
     label_sqrt.SetTextFont(62);
     label_sqrt.SetTextAlign(31); # align right                                                                                                                                         
-    label_sqrt.AddText("W #rightarrow l#nu, L = 2.3 fb^{-1} at #sqrt{s} = 13 TeV");
+    #label_sqrt.AddText("W #rightarrow l#nu, L = 2.3 fb^{-1} at #sqrt{s} = 13 TeV"); # MATTEO CHANGED
     label_sqrt.Draw();
-
+    CMS_lumi(can_SM,4,11); # MATTEO ADDED
     os.system("mkdir -p %s/limitFigs/"%(os.getcwd()));
     
     can_SM.SaveAs("limitFigs/SMLim_%s_HP.png"%(options.channel));
     can_SM.SaveAs("limitFigs/SMLim_%s_HP.pdf"%(options.channel));
+    can_SM.SaveAs("limitFigs/SMLim_%s_HP.root"%(options.channel)); # MATTEO ADDED
 
 #############################
 #### Make limit in xsec #####
@@ -1031,8 +1038,8 @@ def makeSMXsecPlot(SIGCH,cprime = 10, brnew = 00):
 
     curGraph_exp.SetLineStyle(2);
     curGraph_exp.SetLineWidth(3);
-    curGraph_exp.SetMarkerSize(2);
-    curGraph_exp.SetMarkerStyle(24);
+    curGraph_exp.SetMarkerSize(1);
+    curGraph_exp.SetMarkerStyle(20);
     curGraph_exp.SetMarkerColor(ROOT.kBlack);
 
     curGraph_1s.SetFillColor(ROOT.kGreen);
@@ -1069,13 +1076,24 @@ def makeSMXsecPlot(SIGCH,cprime = 10, brnew = 00):
 #    upperPad.SetLeftMargin(0.18);
 #    upperPad.Draw();
 #    upperPad.cd();
-
-    hrl_SM.GetYaxis().SetTitle("#sigma_{95%} x BR(G_{Bulk} #rightarrow WW)(pb)");
+    
+    
+    # MATTEO CHANGED
+    if (options.sample).find('BulkGraviton') != -1:
+       hrl_SM.GetYaxis().SetTitle("#sigma_{95%} x BR(G_{Bulk} #rightarrow WW)(pb)");
+    else:
+       hrl_SM.GetYaxis().SetTitle("#sigma_{95%} x BR(H #rightarrow WW)(pb)");
+       
+       
     hrl_SM.GetYaxis().SetTitleOffset(1.35);
     hrl_SM.GetYaxis().SetTitleSize(0.045);
     hrl_SM.GetYaxis().SetTitleFont(42);
-
-    hrl_SM.GetXaxis().SetTitle("M_{G} (GeV)");
+    
+    if (options.sample).find('BulkGraviton') != -1:
+       hrl_SM.GetXaxis().SetTitle("M_{G} (GeV)");
+    else:
+       hrl_SM.GetXaxis().SetTitle("M_{H} (GeV)");
+       
     hrl_SM.GetXaxis().SetTitleSize(0.045);
     hrl_SM.GetXaxis().SetTitleFont(42);
 
@@ -1087,8 +1105,8 @@ def makeSMXsecPlot(SIGCH,cprime = 10, brnew = 00):
     curGraph_2s.Draw("F");
     curGraph_1s.Draw("Fsame");
     if not options.blindObservedLine : curGraph_obs.Draw("PCsame");
-    curGraph_exp.Draw("Csame");
-    curGraph_xsec.Draw("Csame");
+    curGraph_exp.Draw("LPsame");
+    curGraph_xsec.Draw("LPsame");
 #    oneLine.Draw("same");
 
 #    leg2 = ROOT.TLegend(0.3,0.72,0.75,0.9);
@@ -1103,8 +1121,14 @@ def makeSMXsecPlot(SIGCH,cprime = 10, brnew = 00):
 #    leg2.AddEntry(curGraph_2s, "Asympt. CL_{S} Expected #pm 2#sigma","LF")
     leg2.AddEntry(curGraph_1s, "Asympt. CL_{S} Expected #pm 1 s.d.","LF")
     leg2.AddEntry(curGraph_2s, "Asympt. CL_{S} Expected #pm 2 s.d.","LF")
-    leg2.AddEntry(curGraph_xsec, "#sigma_{TH} #times BR_{G_{Bulk}#rightarrow WW}, k = 0.5","L")
-                                       
+    #leg2.AddEntry(curGraph_xsec, "#sigma_{TH} #times BR_{G_{Bulk}#rightarrow WW}, k = 0.5","L")
+    if (options.sample).find('BulkGraviton') != -1:
+       leg2.AddEntry(curGraph_xsec, "#sigma_{TH} #times BR_{G_{Bulk}#rightarrow WW}, k = 0.5","L")
+    else:
+       leg2.AddEntry(curGraph_xsec, "#sigma_{TH} #times BR_{H#rightarrow WW}, k = 0.5","L")
+    
+    
+                                      
     if not options.blindObservedLine:     leg2.AddEntry(curGraph_obs,"Asympt. CL_{S} Observed","LP")
 
     CMS_lumi(can_SM,4,11);
@@ -1147,6 +1171,7 @@ def makeSMXsecPlot(SIGCH,cprime = 10, brnew = 00):
     
     can_SM.SaveAs("limitFigs/SMXsec_%s_HP.png"%(options.channel));
     can_SM.SaveAs("limitFigs/SMXsec_%s_HP.pdf"%(options.channel));
+    can_SM.SaveAs("limitFigs/SMXsec_%s_HP.root"%(options.channel));
 
 ##############################
 #### Make SM PValue Plots ####  
