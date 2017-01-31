@@ -58,15 +58,15 @@ def readVBFCutsFile():
     if options.pseudodata:
        
        if options.vbf:
-          in_VBFCutsFile="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/pseudoData/Lumi_%s_VBF/"%(options.ntuple,str("%.0f"%options.lumi))+textName;
+          in_VBFCutsFile="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/pseudoData/Lumi_%s_VBF/%s_Channel/"%(options.ntuple,str("%.0f"%options.lumi),options.channel)+textName;
        else:
-          in_VBFCutsFile="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/pseudoData/Lumi_%s/"%(options.ntuple,str("%.0f"%options.lumi))+textName;
+          in_VBFCutsFile="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/pseudoData/Lumi_%s/%s_Channel/"%(options.ntuple,str("%.0f"%options.lumi),options.channel)+textName;
     
     else:
        if options.vbf:
-          in_VBFCutsFile="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/trueData/Lumi_%s_VBF/"%(options.ntuple,str("%.0f"%options.lumi))+textName;
+          in_VBFCutsFile="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/trueData/Lumi_%s_VBF/%s_Channel/"%(options.ntuple,str("%.0f"%options.lumi),options.channel)+textName;
        else:
-          in_VBFCutsFile="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/trueData/Lumi_%s/"%(options.ntuple,str("%.0f"%options.lumi))+textName;    
+          in_VBFCutsFile="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/trueData/Lumi_%s/%s_Channel/"%(options.ntuple,str("%.0f"%options.lumi),options.channel)+textName; 
 
     tmp_VBFCutsFile=open(in_VBFCutsFile, 'r');
     readedLines=tmp_VBFCutsFile.readlines();
@@ -387,11 +387,15 @@ if __name__ == '__main__':
                LatexFile.write("\\frametitle{Exclusion Plots - %s}\n"%sample);
                LatexFile.write("\\framesubtitle{Ntuple %s \\vspace{6pt} Channel: %s \\vspace{6pt} Luminosity: %.1f ${fb}^{-1}$}\n"%(Ntuple_Name_texttt,channel_latex_mm,lumi));
                
+               
                k=0;
                for CutValue in CutInputVector:  
-                     
+                   tmp0=CutValue[0];
+                   tmp1=CutValue[1];
+                   Mjj=float(tmp1);
+                   Deta=float(tmp0);
                    
-                   Plots_dir="DEta%1.3f_Mjj_%.0f/cards_%s_%s_VBF/%s/limitFigs"%(CutValue[0],CutValue[1],options.channel,options.category,sample);
+                   Plots_dir="DEta%1.3f_Mjj_%.0f/cards_%s_%s_VBF/%s/limitFigs"%(Deta,Mjj,options.channel,options.category,sample);
                    
                    if k:
                       LatexFile.write("\\framebreak\n");
@@ -418,6 +422,30 @@ if __name__ == '__main__':
                    LatexFile.write("\end{center}\n");
                    LatexFile.write("\end{figure}\n");
                    
+                   
+                   
+                   LatexFile.write("\\begin{center}\n");
+                   LatexFile.write("\\begin{minipage}{0.4\\textwidth}\n");
+                   LatexFile.write("\\begin{block}{}\n");
+                   LatexFile.write("\centering\n");
+                   LatexFile.write("$\Delta\eta_{jj}=%1.3f$ \\hspace{10pt} $M_{jj}>%.0f$\n"%(CutValue[0],CutValue[1]));
+                   LatexFile.write("\end{block}\n");
+                   LatexFile.write("\end{minipage}\n");
+                   LatexFile.write("\end{center}\n");
+                   LatexFile.write("\n");
+                   LatexFile.write("\setcounter{subfigure}{0}\n");
+                   LatexFile.write("\\begin{figure}[h]\n");
+                   LatexFile.write("\\begin{center}\n");
+                   LatexFile.write("\subfloat[][\emph{\\texttt{m\_lvj\_sb\_lo\_WJets0}}]\n");
+                   LatexFile.write("{\includegraphics[width=.48\columnwidth]{DataCardsPlot/DEta%1.3f_Mjj_%.0f/plots_em_HP_VBF/%s/m_lvj_fitting/%s1000/m_lvj_sb_lo_WJets0_xww__with_pull.pdf}} \quad\n"%(Deta,Mjj,sample,sample));
+                   LatexFile.write("\subfloat[][\emph{\\texttt{m\_j\_sb\_lo\_WJets0}}]\n");
+                   LatexFile.write("{\includegraphics[width=.48\columnwidth]{DataCardsPlot/DEta%1.3f_Mjj_%.0f/plots_em_HP_VBF/%s/m_j_fitting/%s1000/m_j_sideband_WJets0_xww__with_pull.pdf}}\n"%(Deta,Mjj,sample,sample));
+                   #ofile_gi.write("\%\caption{$\mu$-channel: Input Variables for Cut Optimization.}\n");
+                   #LatexFile.write("\label{}\n");
+                   LatexFile.write("\end{center}\n");
+                   LatexFile.write("\end{figure}\n");
+                   
+                   
                    k=k+1
 
 
@@ -430,8 +458,13 @@ if __name__ == '__main__':
            
            
            
-           
 '''
 scp -r mrappo@lxplus.cern.ch:~/work/test/CMSSW_7_1_5/src/boostedWWAnalysis/Ntuple_WWTree_22sep_jecV7_lowmass/trueData/Lumi_2300_VBF/ /home/matteo/Tesi/LxPlus_Matteo/ControlPlots/
+
+scp -r lbrianza@lxplus.cern.ch:~/work/test/CMSSW_7_1_5/src/boostedWWAnalysis/Ntuple_WWTree_22sep_jecV7_lowmass/trueData/Lumi_2300_VBF/ /home/matteo/Tesi/LxPlus_Matteo/ControlPlots/
+
+scp -r lbrianza@lxplus.cern.ch:~/work/matteo/NEW/CMSSW_5_3_13/src/EXOVVFitter/Ntuple_WWTree_22sep_jecV7_lowmass/trueData/Lumi_2300_VBF/em_Channel/ /home/matteo/Tesi/LxPlus_Matteo/ControlPlots/
+
+
 '''
                

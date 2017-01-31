@@ -3042,7 +3042,9 @@ def makeContourPlotBrNew(contourListMassExp,contourListMassObs):
 
 if __name__ == '__main__':
 
-        
+    print "---------------- MATTEO CHECK------------------"
+    print "     STARTING LIMITS CODE"
+    print "-----------------------------------------------"  
     CHAN = options.channel;
     DIR  = options.datacardDIR;
     if options.sigChannel !="": 

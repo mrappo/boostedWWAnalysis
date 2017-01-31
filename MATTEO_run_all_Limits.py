@@ -45,15 +45,15 @@ def readVBFCutsFile():
     if options.pseudodata:
        
        if options.vbf:
-          in_VBFCutsFile="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/pseudoData/Lumi_%s_VBF/"%(options.ntuple,str("%.0f"%options.lumi))+textName;
+          in_VBFCutsFile="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/pseudoData/Lumi_%s_VBF/%s_Channel/"%(options.ntuple,str("%.0f"%options.lumi),options.channel)+textName;
        else:
-          in_VBFCutsFile="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/pseudoData/Lumi_%s/"%(options.ntuple,str("%.0f"%options.lumi))+textName;
+          in_VBFCutsFile="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/pseudoData/Lumi_%s/%s_Channel/"%(options.ntuple,str("%.0f"%options.lumi),options.channel)+textName;
     
     else:
        if options.vbf:
-          in_VBFCutsFile="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/trueData/Lumi_%s_VBF/"%(options.ntuple,str("%.0f"%options.lumi))+textName;
+          in_VBFCutsFile="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/trueData/Lumi_%s_VBF/%s_Channel/"%(options.ntuple,str("%.0f"%options.lumi),options.channel)+textName;
        else:
-          in_VBFCutsFile="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/trueData/Lumi_%s/"%(options.ntuple,str("%.0f"%options.lumi))+textName;    
+          in_VBFCutsFile="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/trueData/Lumi_%s/%s_Channel/"%(options.ntuple,str("%.0f"%options.lumi),options.channel)+textName;    
 
     tmp_VBFCutsFile=open(in_VBFCutsFile, 'r');
     readedLines=tmp_VBFCutsFile.readlines();
@@ -316,7 +316,7 @@ if __name__ == '__main__':
                          pd2T.wait();
           
                   #../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_WWTree_22sep_jecV7_lowmass/trueData/Lumi_2300_VBF/
-                  datacards_dir_in="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/trueData/Lumi_%s_VBF/DEta%1.3f_Mjj_%.0f/cards_%s_%s_VBF"%(options.ntuple,lumi_str,CutValue[0],CutValue[1],options.channel,options.category);
+                  datacards_dir_in="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/trueData/Lumi_%s_VBF/%s_Channel/DEta%1.3f_Mjj_%.0f/cards_%s_%s_VBF"%(options.ntuple,lumi_str,options.channel,CutValue[0],CutValue[1],options.channel,options.category);
                   lumi_dir=Ntuple_dir_name+"/trueData/Lumi_%s_VBF"%lumi_str;
                   if not os.path.isdir(lumi_dir):
                          #os.system("mkdir "+lumi_dir);
@@ -457,15 +457,15 @@ if __name__ == '__main__':
   
   
                    if (options.batchMode==True):
-                      
+                      '''
                       log_dir=cards_dir+"/Log_VBF";
                       if not os.path.isdir(log_dir):
                              #os.system("mkdir "+log_dir);
                              pd4 = subprocess.Popen(['mkdir',log_dir]);
                              pd4.wait();
                       
-                      logFile=log_dir+"/log_VBF_%s.txt"%sample;
-                      
+                      logFile=log_dir+"/log_VBF_%s.log"%sample;
+                      '''
                       
                       job_dir=cards_dir+"/Job_VBF";
                       if not os.path.isdir(job_dir):
@@ -485,16 +485,15 @@ if __name__ == '__main__':
                       outScript.write("\n"+'ls');
                       
                       
-                      if options.channel=="em":
+                   
                                   
-                         cmd_tmp ="python MATTEO_LimitsCode.py -b --computeLimits --channel %s --datacardDIR %s --makeSMLimitPlot 1 --plotLimits 1 --systematics 1 --sample %s --vbf TRUE --blindObservedLine 1 --jetBin _2jet > "%(options.channel,cards_dir,sample);
-                                                
-                       
-                      else:
-                         cmd_tmp ="python MATTEO_LimitsCode.py -b --computeLimits --channel %s --datacardDIR %s --makeSMLimitPlot 1 --plotLimits 1 --systematics 1 --sample %s --vbf TRUE --blindObservedLine 1 > "%(options.channel,cards_dir,sample);
+                      cmd ="python MATTEO_runLimitsForLog.py --channel %s --datacardDIR %s --sample %s"%(options.channel,cards_dir,sample);
+                                    
+                      #   cmd ="python MATTEO_LimitsCode.py -b --computeLimits --channel %s --datacardDIR %s --makeSMLimitPlot 1 --plotLimits 1 --systematics 1 --sample %s --vbf TRUE --blindObservedLine 1 > "%(options.channel,cards_dir,sample);
                          
-
-                      cmd = cmd_tmp+logFile;
+                      
+                     
+                      print cmd
                       outScript.write("\n"+cmd);
                       #outScript.write("\n"+'rm *.out');
                       outScript.close();
@@ -510,6 +509,11 @@ if __name__ == '__main__':
                       #os.system("bsub -q cmscaf1nd -cwd "+currentDir+" "+currentDir+"/"+fn+".sh");
                       
                    else:
+                   
+                   
+                      pMKLim = subprocess.Popen(['python','MATTEO_runLimitsForLog.py','--channel',options.channel,'--datacardDIR',cards_dir,'--sample',sample]);
+                      pMKLim.wait();
+                      '''
                       if options.channel=="em":            
                          pMKLim = subprocess.Popen(['python','MATTEO_LimitsCode.py','-b','--computeLimits','--channel',options.channel,'--datacardDIR',cards_dir,'--makeSMLimitPlot','1','--plotLimits','1','--systematics','1','--sample',sample,'--vbf','TRUE','--blindObservedLine','1','--jetBin','_2jet']);
                          pMKLim.wait();
@@ -519,7 +523,8 @@ if __name__ == '__main__':
                          pMKLim = subprocess.Popen(['python','MATTEO_LimitsCode.py','-b','--computeLimits','--channel',options.channel,'--datacardDIR',cards_dir,'--makeSMLimitPlot','1','--plotLimits','1','--systematics','1','--sample',sample,'--vbf','TRUE','--blindObservedLine','1']);
                          pMKLim.wait();
                        
-  
+                      '''
+                      print "ciao!"
   
   
   
@@ -709,5 +714,5 @@ if __name__ == '__main__':
     
     
     
-    
+#python MATTEO_LimitsCode.py -b --computeLimits --channel em --datacardDIR Ntuple_WWTree_22sep_jecV7_lowmass/trueData/Lumi_2300_VBF/DEta2.500_Mjj_200/cards_em_HP_VBF/BulkGraviton --makeSMLimitPlot 1 --plotLimits 1 --systematics 1 --sample BulkGraviton --vbf TRUE --blindObservedLine 1 --jetBin _2jet > Ntuple_WWTree_22sep_jecV7_lowmass/trueData/Lumi_2300_VBF/DEta2.500_Mjj_200/cards_em_HP_VBF/BulkGraviton/Log_VBF/log_VBF_BulkGraviton.log   
        

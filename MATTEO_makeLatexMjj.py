@@ -58,15 +58,15 @@ def readVBFCutsFile():
     if options.pseudodata:
        
        if options.vbf:
-          in_VBFCutsFile="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/pseudoData/Lumi_%s_VBF/"%(options.ntuple,str("%.0f"%options.lumi))+textName;
+          in_VBFCutsFile="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/pseudoData/Lumi_%s_VBF/%s_Channel/"%(options.ntuple,str("%.0f"%options.lumi),options.channel)+textName;
        else:
-          in_VBFCutsFile="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/pseudoData/Lumi_%s/"%(options.ntuple,str("%.0f"%options.lumi))+textName;
+          in_VBFCutsFile="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/pseudoData/Lumi_%s/%s_Channel/"%(options.ntuple,str("%.0f"%options.lumi),options.channel)+textName;
     
     else:
        if options.vbf:
-          in_VBFCutsFile="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/trueData/Lumi_%s_VBF/"%(options.ntuple,str("%.0f"%options.lumi))+textName;
+          in_VBFCutsFile="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/trueData/Lumi_%s_VBF/%s_Channel/"%(options.ntuple,str("%.0f"%options.lumi),options.channel)+textName;
        else:
-          in_VBFCutsFile="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/trueData/Lumi_%s/"%(options.ntuple,str("%.0f"%options.lumi))+textName;    
+          in_VBFCutsFile="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/trueData/Lumi_%s/%s_Channel/"%(options.ntuple,str("%.0f"%options.lumi),options.channel)+textName;   
 
     tmp_VBFCutsFile=open(in_VBFCutsFile, 'r');
     readedLines=tmp_VBFCutsFile.readlines();
