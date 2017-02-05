@@ -2,6 +2,7 @@ import os,commands
 import sys
 from optparse import OptionParser
 import subprocess
+from MATTEO_LatexFunctions import replace_latex,readVBFCutsFile,selectDEtaEvent,print_lined_string_File,print_boxed_string_File
 
 parser = OptionParser()
 
@@ -41,7 +42,7 @@ Channel=options.channel;
 ######################################################
 
 
-
+'''
 
 def replace_latex(in_string):
     out1=in_string.replace("&&", "\&\&");
@@ -55,18 +56,25 @@ def replace_latex(in_string):
 
 def readVBFCutsFile():
     textName="VBF_CutListFile.txt";
+    
+    if options.UnBlind:
+       tmp_blind_dirName="UnBlind";
+    
+    else:
+       tmp_blind_dirName="Blind";
+    
     if options.pseudodata:
        
        if options.vbf:
-          in_VBFCutsFile="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/pseudoData/Lumi_%s_VBF/%s_Channel/"%(options.ntuple,str("%.0f"%options.lumi),options.channel)+textName;
+          in_VBFCutsFile="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/pseudoData/Lumi_%s_VBF/%s_Channel/%s/"%(options.ntuple,str("%.0f"%options.lumi),options.channel,tmp_blind_dirName)+textName;
        else:
-          in_VBFCutsFile="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/pseudoData/Lumi_%s/%s_Channel/"%(options.ntuple,str("%.0f"%options.lumi),options.channel)+textName;
+          in_VBFCutsFile="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/pseudoData/Lumi_%s/%s_Channel/%s/"%(options.ntuple,str("%.0f"%options.lumi),options.channel,tmp_blind_dirName)+textName;
     
     else:
        if options.vbf:
-          in_VBFCutsFile="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/trueData/Lumi_%s_VBF/%s_Channel/"%(options.ntuple,str("%.0f"%options.lumi),options.channel)+textName;
+          in_VBFCutsFile="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/trueData/Lumi_%s_VBF/%s_Channel/%s/"%(options.ntuple,str("%.0f"%options.lumi),options.channel,tmp_blind_dirName)+textName;
        else:
-          in_VBFCutsFile="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/trueData/Lumi_%s/%s_Channel/"%(options.ntuple,str("%.0f"%options.lumi),options.channel)+textName;   
+          in_VBFCutsFile="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/trueData/Lumi_%s/%s_Channel/%s/"%(options.ntuple,str("%.0f"%options.lumi),options.channel,tmp_blind_dirName)+textName;   
 
     tmp_VBFCutsFile=open(in_VBFCutsFile, 'r');
     readedLines=tmp_VBFCutsFile.readlines();
@@ -298,7 +306,7 @@ def print_boxed_string_File(in_string_vector,out_file):
 
 
 
-
+'''
 
 
 

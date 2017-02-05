@@ -31,6 +31,7 @@ parser.add_option('--vbf', action="store_true",dest="VBF_process",default=True)
 parser.add_option('--pseudodata', action="store_true",dest="pseudodata",default=False)
 parser.add_option('--lumi', action="store",type="float",dest="lumi",default=2300.0)
 parser.add_option('--CrossCuts', action="store_true",dest="CrosCuts",default=True)
+parser.add_option('--UnBlind', action="store_true",dest="UnBlind",default=False)
 #parser.add_option('--SignleCuts', action="store_true",dest="SingleCuts",default=False)
 #parser.add_option('--MultipleCuts', action="store_true",dest="MultipleCuts",default=False)
 (options, args) = parser.parse_args()
@@ -81,18 +82,25 @@ def set_palette(name,ncontours):
 
 def readVBFCutsFile():
     textName="VBF_CutListFile.txt";
+
+    if options.UnBlind:
+       tmp_blind_dirName="UnBlind";
+    
+    else:
+       tmp_blind_dirName="Blind";
+
     if options.pseudodata:
        
        if options.vbf:
-          in_VBFCutsFile="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/pseudoData/Lumi_%s_VBF/%s_Channel/"%(options.ntuple,str("%.0f"%options.lumi),options.channel)+textName;
+          in_VBFCutsFile="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/pseudoData/Lumi_%s_VBF/%s_Channel/%s/"%(options.ntuple,str("%.0f"%options.lumi),options.channel,tmp_blind_dirName)+textName;
        else:
-          in_VBFCutsFile="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/pseudoData/Lumi_%s/%s_Channel/"%(options.ntuple,str("%.0f"%options.lumi),options.channel)+textName;
+          in_VBFCutsFile="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/pseudoData/Lumi_%s/%s_Channel/%s/"%(options.ntuple,str("%.0f"%options.lumi),options.channel,tmp_blind_dirName)+textName;
     
     else:
        if options.vbf:
-          in_VBFCutsFile="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/trueData/Lumi_%s_VBF/%s_Channel/"%(options.ntuple,str("%.0f"%options.lumi),options.channel)+textName;
+          in_VBFCutsFile="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/trueData/Lumi_%s_VBF/%s_Channel/%s/"%(options.ntuple,str("%.0f"%options.lumi),options.channel,tmp_blind_dirName)+textName;
        else:
-          in_VBFCutsFile="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/trueData/Lumi_%s/%s_Channel/"%(options.ntuple,str("%.0f"%options.lumi),options.channel)+textName;    
+          in_VBFCutsFile="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/trueData/Lumi_%s/%s_Channel/%s/"%(options.ntuple,str("%.0f"%options.lumi),options.channel,tmp_blind_dirName)+textName;   
 
     tmp_VBFCutsFile=open(in_VBFCutsFile, 'r');
     readedLines=tmp_VBFCutsFile.readlines();
@@ -322,8 +330,13 @@ def print_boxed_string_File(in_string_vector,out_file_name):
     
 Sample=["BulkGraviton","Higgs"];
 Ndata=6;
-Deta=[0.0,1.0,1.5,2.0,2.5,3.0];
-Mjj=[0.0,100.0,150.0,200.0,250.0,300.0];
+## DeltaEta Cut
+Deta=[0.0,0.25,0.5,0.75,1.0,1.25,1.5,1.75,2.0,2.25,2.5,2.75,3.0];
+   
+# Mjj Cut
+Mjj=[0.0,25.0,50.0,75.0,100.0,125.0,150.0,175.0,200.0,225.0,250.0,275.0,300.0,325.0];
+#Deta=[0.0,1.0,1.5,2.0,2.5,3.0];
+#Mjj=[0.0,100.0,150.0,200.0,250.0,300.0];
     
 ########################################################
 #### Main Code
@@ -334,19 +347,29 @@ if __name__ == '__main__':
     if not os.path.isdir(Ntuple_dir_name):
            print "\nError!!! Missing directory:%s \n EXIT"%Ntuple_dir_name
            sys.exit();
+
+    if options.UnBlind:
+       tmp_blind_dirName="UnBlind";
+    
+    else:
+       tmp_blind_dirName="Blind";
     
     
     if options.pseudodata:
        pseudodata_dir=Ntuple_dir_name+"/pseudoData"
-       lumi_dir=Ntuple_dir_name+"/pseudoData/Lumi_%.0f_VBF"%(options.lumi);
+       lumi_dir=Ntuple_dir_name+"/pseudoData/Lumi_%.0f_VBF/%s_Channel/%s"%(options.lumi,options.channel,tmp_blind_dirName);
                 
     else:
        truedata_dir=Ntuple_dir_name+"/trueData"
-       lumi_dir=Ntuple_dir_name+"/trueData/Lumi_%.0f_VBF"%(options.lumi);     
+       lumi_dir=Ntuple_dir_name+"/trueData/Lumi_%.0f_VBF/%s_Channel/%s"%(options.lumi,options.channel,tmp_blind_dirName);
     
     final_dir=lumi_dir+"/PlotsExclusionLimit";
     if not os.path.isdir(final_dir):
            os.system("mkdir "+final_dir);    
+    
+
+    
+    
     i=j=0;
     for i in Deta:
         j=j+1;
@@ -358,6 +381,8 @@ if __name__ == '__main__':
         j=j+1;
     
     Total_bin_mjj=j;
+    
+    print "N_eta: %.0f \t N_Mjj: %.0f"%(Total_bin_deta,Total_bin_mjj)
     
     
     i=j=sm=0;
@@ -388,7 +413,7 @@ if __name__ == '__main__':
            tmp3_graph_observed=ROOT.TH2D("graph_val","graph_val",Total_bin_mjj,Mjj[0],Mjj[Total_bin_mjj-1],Total_bin_deta,Deta[0],Deta[Total_bin_deta-1]);
            tmp3_graph_expected=ROOT.TH2D("graph_val","graph_val",Total_bin_mjj,Mjj[0],Mjj[Total_bin_mjj-1],Total_bin_deta,Deta[0],Deta[Total_bin_deta-1]);
   
- 
+           
            i=j=0;
            for i in range(Total_bin_mjj):
                tmp1_graph_1Sigma_up.GetXaxis().SetBinLabel(i+1,str("%.0f"%(Mjj[i])));
@@ -437,7 +462,7 @@ if __name__ == '__main__':
                tmp3_graph_observed.GetYaxis().SetBinLabel(i+1,str("%1.3f"%(Deta[i])));
                tmp3_graph_expected.GetYaxis().SetBinLabel(i+1,str("%1.3f"%(Deta[i]))); 
            
-        
+           
            '''  
            tmp1_graph_1Sigma_up.GetXaxis().SetTitle("M_{jj}");
            tmp1_graph_1Sigma_up.GetXaxis().CenterTitle(kTRUE);
@@ -879,13 +904,15 @@ if __name__ == '__main__':
                 tmp_number_data=tmp_readed_vector[0];
                 tmp_data_vector=tmp_readed_vector[1];
                 print "\n"
-                print tmp_data_vector
+                #print tmp_data_vector
                 print "N_mjj %.0f\t N_Deta%.0f"%(n_bin_mjj,n_bin_deta)
                 print "\n------------------------------------------\n\n"
                 g=0;
                 for g in range(Ncycle):
                     
+                    print g
                     if tmp_number_data:
+                       #print "\n index vector: %.0f"%(Ndata*g)
                        tmp_observed=float(tmp_data_vector[Ndata*g]);
                        tmp_2sigma_up=float(tmp_data_vector[Ndata*g+1]);
                        tmp_1sigma_up=float(tmp_data_vector[Ndata*g+2]);
@@ -936,14 +963,66 @@ if __name__ == '__main__':
         k=l=0;
         theta_angle=30;
         phi_angle=190;
+        '''
+        i=j=0;
+        for i in range(Total_bin_mjj):
+               tmp1_graph_1Sigma_up.GetXaxis().SetBinLabel(i+1,str("%.0f"%(Mjj[i])));
+               tmp1_graph_2Sigma_up.GetXaxis().SetBinLabel(i+1,str("%.0f"%(Mjj[i])));
+               tmp1_graph_2Sigma_down.GetXaxis().SetBinLabel(i+1,str("%.0f"%(Mjj[i])));
+               tmp1_graph_1Sigma_down.GetXaxis().SetBinLabel(i+1,str("%.0f"%(Mjj[i])));
+               tmp1_graph_observed.GetXaxis().SetBinLabel(i+1,str("%.0f"%(Mjj[i])));
+               tmp1_graph_expected.GetXaxis().SetBinLabel(i+1,str("%.0f"%(Mjj[i])));
+               
+               tmp2_graph_1Sigma_up.GetXaxis().SetBinLabel(i+1,str("%.0f"%(Mjj[i])));
+               tmp2_graph_2Sigma_up.GetXaxis().SetBinLabel(i+1,str("%.0f"%(Mjj[i])));
+               tmp2_graph_2Sigma_down.GetXaxis().SetBinLabel(i+1,str("%.0f"%(Mjj[i])));
+               tmp2_graph_1Sigma_down.GetXaxis().SetBinLabel(i+1,str("%.0f"%(Mjj[i])));
+               tmp2_graph_observed.GetXaxis().SetBinLabel(i+1,str("%.0f"%(Mjj[i])));
+               tmp2_graph_expected.GetXaxis().SetBinLabel(i+1,str("%.0f"%(Mjj[i])));
+               
+               tmp3_graph_1Sigma_up.GetXaxis().SetBinLabel(i+1,str("%.0f"%(Mjj[i])));
+               tmp3_graph_2Sigma_up.GetXaxis().SetBinLabel(i+1,str("%.0f"%(Mjj[i])));
+               tmp3_graph_2Sigma_down.GetXaxis().SetBinLabel(i+1,str("%.0f"%(Mjj[i])));
+               tmp3_graph_1Sigma_down.GetXaxis().SetBinLabel(i+1,str("%.0f"%(Mjj[i])));
+               tmp3_graph_observed.GetXaxis().SetBinLabel(i+1,str("%.0f"%(Mjj[i])));
+               tmp3_graph_expected.GetXaxis().SetBinLabel(i+1,str("%.0f"%(Mjj[i])));
+               
+               
+               
+        i=j=0;
+        for i in range(Total_bin_deta):
+               tmp1_graph_1Sigma_up.GetYaxis().SetBinLabel(i+1,str("%1.3f"%(Deta[i])));
+               tmp1_graph_2Sigma_up.GetYaxis().SetBinLabel(i+1,str("%1.3f"%(Deta[i])));
+               tmp1_graph_2Sigma_down.GetYaxis().SetBinLabel(i+1,str("%1.3f"%(Deta[i])));
+               tmp1_graph_1Sigma_down.GetYaxis().SetBinLabel(i+1,str("%1.3f"%(Deta[i])));
+               tmp1_graph_observed.GetYaxis().SetBinLabel(i+1,str("%1.3f"%(Deta[i])));
+               tmp1_graph_expected.GetYaxis().SetBinLabel(i+1,str("%1.3f"%(Deta[i])));
+               
+               tmp2_graph_1Sigma_up.GetYaxis().SetBinLabel(i+1,str("%1.3f"%(Deta[i])));
+               tmp2_graph_2Sigma_up.GetYaxis().SetBinLabel(i+1,str("%1.3f"%(Deta[i])));
+               tmp2_graph_2Sigma_down.GetYaxis().SetBinLabel(i+1,str("%1.3f"%(Deta[i])));
+               tmp2_graph_1Sigma_down.GetYaxis().SetBinLabel(i+1,str("%1.3f"%(Deta[i])));
+               tmp2_graph_observed.GetYaxis().SetBinLabel(i+1,str("%1.3f"%(Deta[i])));
+               tmp2_graph_expected.GetYaxis().SetBinLabel(i+1,str("%1.3f"%(Deta[i])));
+               
+               tmp3_graph_1Sigma_up.GetYaxis().SetBinLabel(i+1,str("%1.3f"%(Deta[i])));
+               tmp3_graph_2Sigma_up.GetYaxis().SetBinLabel(i+1,str("%1.3f"%(Deta[i])));
+               tmp3_graph_2Sigma_down.GetYaxis().SetBinLabel(i+1,str("%1.3f"%(Deta[i])));
+               tmp3_graph_1Sigma_down.GetYaxis().SetBinLabel(i+1,str("%1.3f"%(Deta[i])));
+               tmp3_graph_observed.GetYaxis().SetBinLabel(i+1,str("%1.3f"%(Deta[i])));
+               tmp3_graph_expected.GetYaxis().SetBinLabel(i+1,str("%1.3f"%(Deta[i]))); 
+        
+        ''' 
         for k in range(Ncycle):
             if not k:
                    
                    # 1 Sigma Up
                    tmp_canvas11=TCanvas ("Plot","Plot", 1000,600);
+                   tmp1_graph_1Sigma_up.GetXaxis().SetNdivisions(5,kFALSE);
                    tmp1_graph_1Sigma_up.GetXaxis().SetTitle("M_{jj}");
                    tmp1_graph_1Sigma_up.GetXaxis().CenterTitle(kTRUE);
                    tmp1_graph_1Sigma_up.GetXaxis().SetTitleOffset(1.5);
+                   tmp1_graph_1Sigma_up.GetYaxis().SetNdivisions(5,kFALSE);
                    tmp1_graph_1Sigma_up.GetYaxis().SetTitle("#Delta#eta_{jj}");
                    tmp1_graph_1Sigma_up.GetYaxis().CenterTitle(kTRUE);
                    tmp1_graph_1Sigma_up.GetYaxis().SetTitleOffset(1.5);
@@ -960,13 +1039,15 @@ if __name__ == '__main__':
                       tmp1_graph_1Sigma_up.SetTitle("Higgs 650 1Sigma Up");
                    tmp1_graph_1Sigma_up.Draw("LEGO2Z");
                    tmp_canvas11.SaveAs(canvasFileName);
-                   
+                   #raw_input('Press Enter to exit')
                    
                    # 2 Sigma up
                    tmp_canvas12=TCanvas ("Plot","Plot", 1000,600);
+                   tmp1_graph_2Sigma_up.GetXaxis().SetNdivisions(5,kFALSE);
                    tmp1_graph_2Sigma_up.GetXaxis().SetTitle("M_{jj}");
                    tmp1_graph_2Sigma_up.GetXaxis().CenterTitle(kTRUE);
                    tmp1_graph_2Sigma_up.GetXaxis().SetTitleOffset(1.5);
+                   tmp1_graph_2Sigma_up.GetYaxis().SetNdivisions(5,kFALSE);
                    tmp1_graph_2Sigma_up.GetYaxis().SetTitle("#Delta#eta_{jj}");
                    tmp1_graph_2Sigma_up.GetYaxis().CenterTitle(kTRUE);
                    tmp1_graph_2Sigma_up.GetYaxis().SetTitleOffset(1.5);
@@ -987,9 +1068,11 @@ if __name__ == '__main__':
                    
                    # 2 Sigma Down
                    tmp_canvas13=TCanvas ("Plot","Plot", 1000,600);
+                   tmp1_graph_2Sigma_down.GetXaxis().SetNdivisions(5,kFALSE);
                    tmp1_graph_2Sigma_down.GetXaxis().SetTitle("M_{jj}");
                    tmp1_graph_2Sigma_down.GetXaxis().CenterTitle(kTRUE);
                    tmp1_graph_2Sigma_down.GetXaxis().SetTitleOffset(1.5);
+                   tmp1_graph_2Sigma_down.GetYaxis().SetNdivisions(5,kFALSE);
                    tmp1_graph_2Sigma_down.GetYaxis().SetTitle("#Delta#eta_{jj}");
                    tmp1_graph_2Sigma_down.GetYaxis().CenterTitle(kTRUE);
                    tmp1_graph_2Sigma_down.GetYaxis().SetTitleOffset(1.5);
@@ -1010,9 +1093,11 @@ if __name__ == '__main__':
                    
                    # 1 Sigma Down
                    tmp_canvas14=TCanvas ("Plot","Plot", 1000,600);
+                   tmp1_graph_1Sigma_down.GetXaxis().SetNdivisions(5,kFALSE);
                    tmp1_graph_1Sigma_down.GetXaxis().SetTitle("M_{jj}");
                    tmp1_graph_1Sigma_down.GetXaxis().CenterTitle(kTRUE);
                    tmp1_graph_1Sigma_down.GetXaxis().SetTitleOffset(1.5);
+                   tmp1_graph_1Sigma_down.GetYaxis().SetNdivisions(5,kFALSE);
                    tmp1_graph_1Sigma_down.GetYaxis().SetTitle("#Delta#eta_{jj}");
                    tmp1_graph_1Sigma_down.GetYaxis().CenterTitle(kTRUE);
                    tmp1_graph_1Sigma_down.GetYaxis().SetTitleOffset(1.5);
@@ -1033,9 +1118,11 @@ if __name__ == '__main__':
                    
                    # Observed
                    tmp_canvas15=TCanvas ("Plot","Plot", 1000,600);
+                   tmp1_graph_observed.GetXaxis().SetNdivisions(5,kFALSE);
                    tmp1_graph_observed.GetXaxis().SetTitle("M_{jj}");
                    tmp1_graph_observed.GetXaxis().CenterTitle(kTRUE);
                    tmp1_graph_observed.GetXaxis().SetTitleOffset(1.5);
+                   tmp1_graph_observed.GetYaxis().SetNdivisions(5,kFALSE);
                    tmp1_graph_observed.GetYaxis().SetTitle("#Delta#eta_{jj}");
                    tmp1_graph_observed.GetYaxis().CenterTitle(kTRUE);
                    tmp1_graph_observed.GetYaxis().SetTitleOffset(1.5);
@@ -1056,9 +1143,11 @@ if __name__ == '__main__':
                    
                    # Expected
                    tmp_canvas16=TCanvas ("Plot","Plot", 1000,600);
+                   tmp1_graph_expected.GetXaxis().SetNdivisions(5,kFALSE);
                    tmp1_graph_expected.GetXaxis().SetTitle("M_{jj}");
                    tmp1_graph_expected.GetXaxis().CenterTitle(kTRUE);
                    tmp1_graph_expected.GetXaxis().SetTitleOffset(1.5);
+                   tmp1_graph_expected.GetYaxis().SetNdivisions(5,kFALSE);
                    tmp1_graph_expected.GetYaxis().SetTitle("#Delta#eta_{jj}");
                    tmp1_graph_expected.GetYaxis().CenterTitle(kTRUE);
                    tmp1_graph_expected.GetYaxis().SetTitleOffset(1.5);
@@ -1084,9 +1173,11 @@ if __name__ == '__main__':
             if k==1:
                    # 1 Sigma up
                    tmp_canvas21=TCanvas ("Plot","Plot", 1000,600);
+                   tmp2_graph_1Sigma_up.GetXaxis().SetNdivisions(5,kFALSE);
                    tmp2_graph_1Sigma_up.GetXaxis().SetTitle("M_{jj}");
                    tmp2_graph_1Sigma_up.GetXaxis().CenterTitle(kTRUE);
                    tmp2_graph_1Sigma_up.GetXaxis().SetTitleOffset(1.5);
+                   tmp2_graph_1Sigma_up.GetYaxis().SetNdivisions(5,kFALSE);
                    tmp2_graph_1Sigma_up.GetYaxis().SetTitle("#Delta#eta_{jj}");
                    tmp2_graph_1Sigma_up.GetYaxis().CenterTitle(kTRUE);
                    tmp2_graph_1Sigma_up.GetYaxis().SetTitleOffset(1.5);
@@ -1107,9 +1198,11 @@ if __name__ == '__main__':
                    
                    # 2 Sigma Up
                    tmp_canvas22=TCanvas ("Plot","Plot", 1000,600);
+                   tmp2_graph_2Sigma_up.GetXaxis().SetNdivisions(5,kFALSE);
                    tmp2_graph_2Sigma_up.GetXaxis().SetTitle("M_{jj}");
                    tmp2_graph_2Sigma_up.GetXaxis().CenterTitle(kTRUE);
                    tmp2_graph_2Sigma_up.GetXaxis().SetTitleOffset(1.5);
+                   tmp2_graph_2Sigma_up.GetYaxis().SetNdivisions(5,kFALSE);
                    tmp2_graph_2Sigma_up.GetYaxis().SetTitle("#Delta#eta_{jj}");
                    tmp2_graph_2Sigma_up.GetYaxis().CenterTitle(kTRUE);
                    tmp2_graph_2Sigma_up.GetYaxis().SetTitleOffset(1.5);
@@ -1130,9 +1223,11 @@ if __name__ == '__main__':
                    
                    # 2 Sigma Down
                    tmp_canvas23=TCanvas ("Plot","Plot", 1000,600);
+                   tmp2_graph_2Sigma_down.GetXaxis().SetNdivisions(5,kFALSE);
                    tmp2_graph_2Sigma_down.GetXaxis().SetTitle("M_{jj}");
                    tmp2_graph_2Sigma_down.GetXaxis().CenterTitle(kTRUE);
                    tmp2_graph_2Sigma_down.GetXaxis().SetTitleOffset(1.5);
+                   tmp2_graph_2Sigma_down.GetYaxis().SetNdivisions(5,kFALSE);
                    tmp2_graph_2Sigma_down.GetYaxis().SetTitle("#Delta#eta_{jj}");
                    tmp2_graph_2Sigma_down.GetYaxis().CenterTitle(kTRUE);
                    tmp2_graph_2Sigma_down.GetYaxis().SetTitleOffset(1.5);
@@ -1153,9 +1248,11 @@ if __name__ == '__main__':
                    
                    # 1 Sigma Down
                    tmp_canvas24=TCanvas ("Plot","Plot", 1000,600);
+                   tmp2_graph_1Sigma_down.GetXaxis().SetNdivisions(5,kFALSE);
                    tmp2_graph_1Sigma_down.GetXaxis().SetTitle("M_{jj}");
                    tmp2_graph_1Sigma_down.GetXaxis().CenterTitle(kTRUE);
                    tmp2_graph_1Sigma_down.GetXaxis().SetTitleOffset(1.5);
+                   tmp2_graph_1Sigma_down.GetYaxis().SetNdivisions(5,kFALSE);
                    tmp2_graph_1Sigma_down.GetYaxis().SetTitle("#Delta#eta_{jj}");
                    tmp2_graph_1Sigma_down.GetYaxis().CenterTitle(kTRUE);
                    tmp2_graph_1Sigma_down.GetYaxis().SetTitleOffset(1.5);
@@ -1176,9 +1273,11 @@ if __name__ == '__main__':
                    
                    # Observed
                    tmp_canvas25=TCanvas ("Plot","Plot", 1000,600);
+                   tmp2_graph_observed.GetXaxis().SetNdivisions(5,kFALSE);
                    tmp2_graph_observed.GetXaxis().SetTitle("M_{jj}");
                    tmp2_graph_observed.GetXaxis().CenterTitle(kTRUE);
                    tmp2_graph_observed.GetXaxis().SetTitleOffset(1.5);
+                   tmp2_graph_observed.GetYaxis().SetNdivisions(5,kFALSE);
                    tmp2_graph_observed.GetYaxis().SetTitle("#Delta#eta_{jj}");
                    tmp2_graph_observed.GetYaxis().CenterTitle(kTRUE);
                    tmp2_graph_observed.GetYaxis().SetTitleOffset(1.5);
@@ -1199,9 +1298,12 @@ if __name__ == '__main__':
                    
                    # Expected
                    tmp_canvas26=TCanvas ("Plot","Plot", 1000,600);
+                   tmp2_graph_expected.GetXaxis().SetNdivisions(5,kFALSE);
+                   tmp2_graph_expected.GetXaxis().SetNdivisions(5,kFALSE);
                    tmp2_graph_expected.GetXaxis().SetTitle("M_{jj}");
                    tmp2_graph_expected.GetXaxis().CenterTitle(kTRUE);
                    tmp2_graph_expected.GetXaxis().SetTitleOffset(1.5);
+                   tmp2_graph_expected.GetYaxis().SetNdivisions(5,kFALSE);
                    tmp2_graph_expected.GetYaxis().SetTitle("#Delta#eta_{jj}");
                    tmp2_graph_expected.GetYaxis().CenterTitle(kTRUE);
                    tmp2_graph_expected.GetYaxis().SetTitleOffset(1.5);
@@ -1224,9 +1326,11 @@ if __name__ == '__main__':
                    
                    # 1 Sigma Up
                    tmp_canvas31=TCanvas ("Plot","Plot", 1000,600);
+                   tmp3_graph_1Sigma_up.GetXaxis().SetNdivisions(5,kFALSE);
                    tmp3_graph_1Sigma_up.GetXaxis().SetTitle("M_{jj}");
                    tmp3_graph_1Sigma_up.GetXaxis().CenterTitle(kTRUE);
                    tmp3_graph_1Sigma_up.GetXaxis().SetTitleOffset(1.5);
+                   tmp3_graph_1Sigma_up.GetYaxis().SetNdivisions(5,kFALSE);
                    tmp3_graph_1Sigma_up.GetYaxis().SetTitle("#Delta#eta_{jj}");
                    tmp3_graph_1Sigma_up.GetYaxis().CenterTitle(kTRUE);
                    tmp3_graph_1Sigma_up.GetYaxis().SetTitleOffset(1.5);
@@ -1243,9 +1347,11 @@ if __name__ == '__main__':
                    
                    # 2 Sigma Up
                    tmp_canvas32=TCanvas ("Plot","Plot", 1000,600);
+                   tmp3_graph_2Sigma_up.GetXaxis().SetNdivisions(5,kFALSE);
                    tmp3_graph_2Sigma_up.GetXaxis().SetTitle("M_{jj}");
                    tmp3_graph_2Sigma_up.GetXaxis().CenterTitle(kTRUE);
                    tmp3_graph_2Sigma_up.GetXaxis().SetTitleOffset(1.5);
+                   tmp3_graph_2Sigma_up.GetYaxis().SetNdivisions(5,kFALSE);
                    tmp3_graph_2Sigma_up.GetYaxis().SetTitle("#Delta#eta_{jj}");
                    tmp3_graph_2Sigma_up.GetYaxis().CenterTitle(kTRUE);
                    tmp3_graph_2Sigma_up.GetYaxis().SetTitleOffset(1.5);
@@ -1262,9 +1368,11 @@ if __name__ == '__main__':
                    
                    # 2 Sigma Down
                    tmp_canvas33=TCanvas ("Plot","Plot", 1000,600);
+                   tmp3_graph_2Sigma_down.GetXaxis().SetNdivisions(5,kFALSE);
                    tmp3_graph_2Sigma_down.GetXaxis().SetTitle("M_{jj}");
                    tmp3_graph_2Sigma_down.GetXaxis().CenterTitle(kTRUE);
                    tmp3_graph_2Sigma_down.GetXaxis().SetTitleOffset(1.5);
+                   tmp3_graph_2Sigma_down.GetYaxis().SetNdivisions(5,kFALSE);
                    tmp3_graph_2Sigma_down.GetYaxis().SetTitle("#Delta#eta_{jj}");
                    tmp3_graph_2Sigma_down.GetYaxis().CenterTitle(kTRUE);
                    tmp3_graph_2Sigma_down.GetYaxis().SetTitleOffset(1.5);
@@ -1281,9 +1389,11 @@ if __name__ == '__main__':
                    
                    # 1 Sigma Down
                    tmp_canvas34=TCanvas ("Plot","Plot", 1000,600);
+                   tmp3_graph_1Sigma_down.GetXaxis().SetNdivisions(5,kFALSE);
                    tmp3_graph_1Sigma_down.GetXaxis().SetTitle("M_{jj}");
                    tmp3_graph_1Sigma_down.GetXaxis().CenterTitle(kTRUE);
                    tmp3_graph_1Sigma_down.GetXaxis().SetTitleOffset(1.5);
+                   tmp3_graph_1Sigma_down.GetYaxis().SetNdivisions(5,kFALSE);
                    tmp3_graph_1Sigma_down.GetYaxis().SetTitle("#Delta#eta_{jj}");
                    tmp3_graph_1Sigma_down.GetYaxis().CenterTitle(kTRUE);
                    tmp3_graph_1Sigma_down.GetYaxis().SetTitleOffset(1.5);
@@ -1300,9 +1410,11 @@ if __name__ == '__main__':
                    
                    # Observed
                    tmp_canvas35=TCanvas ("Plot","Plot", 1000,600);
+                   tmp3_graph_observed.GetXaxis().SetNdivisions(5,kFALSE);
                    tmp3_graph_observed.GetXaxis().SetTitle("M_{jj}");
                    tmp3_graph_observed.GetXaxis().CenterTitle(kTRUE);
                    tmp3_graph_observed.GetXaxis().SetTitleOffset(1.5);
+                   tmp3_graph_observed.GetYaxis().SetNdivisions(5,kFALSE);
                    tmp3_graph_observed.GetYaxis().SetTitle("#Delta#eta_{jj}");
                    tmp3_graph_observed.GetYaxis().CenterTitle(kTRUE);
                    tmp3_graph_observed.GetYaxis().SetTitleOffset(1.5);
@@ -1319,9 +1431,11 @@ if __name__ == '__main__':
                    
                    # Expected
                    tmp_canvas36=TCanvas ("Plot","Plot", 1000,600);
+                   tmp3_graph_expected.GetXaxis().SetNdivisions(5,kFALSE);
                    tmp3_graph_expected.GetXaxis().SetTitle("M_{jj}");
                    tmp3_graph_expected.GetXaxis().CenterTitle(kTRUE);
                    tmp3_graph_expected.GetXaxis().SetTitleOffset(1.5);
+                   tmp3_graph_expected.GetYaxis().SetNdivisions(5,kFALSE);
                    tmp3_graph_expected.GetYaxis().SetTitle("#Delta#eta_{jj}");
                    tmp3_graph_expected.GetYaxis().CenterTitle(kTRUE);
                    tmp3_graph_expected.GetYaxis().SetTitleOffset(1.5);

@@ -15,6 +15,7 @@ parser.add_option('--datacardDIR', action="store", type="string", dest="datacard
 parser.add_option('--ntuple', action="store",type="string",dest="ntuple",default="WWTree_22sep_jecV7_lowmass")
 parser.add_option('--sample', action="store",type="string",dest="sample",default="BulkGraviton")
 parser.add_option('--vbf', action="store_true",dest="VBF_process",default=False)
+parser.add_option('--UnBlind', action="store_true",dest="UnBlind",default=False)
 (options, args) = parser.parse_args()
 
 currentDir = os.getcwd();
@@ -36,10 +37,17 @@ if __name__ == '__main__':
     dataOutputFile=open(dataOutputFileName,'w+');
     
     if not options.channel=="mu":
-       pMKLimLog = subprocess.Popen(['python','MATTEO_LimitsCode.py','-b','--computeLimits','--channel',options.channel,'--datacardDIR',options.datacardDIR,'--makeSMLimitPlot','1','--plotLimits','1','--systematics','1','--sample',options.sample,'--vbf','TRUE','--blindObservedLine','1','--jetBin','_2jet'],stdout=subprocess.PIPE,stderr=output_log2);
+       if options.UnBlind:
+          pMKLimLog = subprocess.Popen(['python','MATTEO_LimitsCode.py','-b','--computeLimits','--channel',options.channel,'--datacardDIR',options.datacardDIR,'--makeSMLimitPlot','1','--plotLimits','1','--systematics','1','--sample',options.sample,'--vbf','TRUE','--blindObservedLine','0','--jetBin','_2jet'],stdout=subprocess.PIPE,stderr=output_log2);
+       else:
+          pMKLimLog = subprocess.Popen(['python','MATTEO_LimitsCode.py','-b','--computeLimits','--channel',options.channel,'--datacardDIR',options.datacardDIR,'--makeSMLimitPlot','1','--plotLimits','1','--systematics','1','--sample',options.sample,'--vbf','TRUE','--blindObservedLine','1','--jetBin','_2jet'],stdout=subprocess.PIPE,stderr=output_log2);
     
     else:
-       pMKLimLog = subprocess.Popen(['python','MATTEO_LimitsCode.py','-b','--computeLimits','--channel',options.channel,'--datacardDIR',options.datacardDIR,'--makeSMLimitPlot','1','--plotLimits','1','--systematics','1','--sample',options.sample,'--vbf','TRUE','--blindObservedLine','1'],stdout=subprocess.PIPE,stderr=output_log2);
+       if options.UnBlind:
+          pMKLimLog = subprocess.Popen(['python','MATTEO_LimitsCode.py','-b','--computeLimits','--channel',options.channel,'--datacardDIR',options.datacardDIR,'--makeSMLimitPlot','1','--plotLimits','1','--systematics','1','--sample',options.sample,'--vbf','TRUE','--blindObservedLine','0'],stdout=subprocess.PIPE,stderr=output_log2);
+
+       else:
+          pMKLimLog = subprocess.Popen(['python','MATTEO_LimitsCode.py','-b','--computeLimits','--channel',options.channel,'--datacardDIR',options.datacardDIR,'--makeSMLimitPlot','1','--plotLimits','1','--systematics','1','--sample',options.sample,'--vbf','TRUE','--blindObservedLine','1'],stdout=subprocess.PIPE,stderr=output_log2);
 
     
     

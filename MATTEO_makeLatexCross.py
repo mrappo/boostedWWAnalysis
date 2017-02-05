@@ -2,6 +2,7 @@ import os,commands
 import sys
 from optparse import OptionParser
 import subprocess
+from MATTEO_LatexFunctions import replace_latex,readVBFCutsFile,selectDEtaEvent,print_lined_string_File,print_boxed_string_File
 
 parser = OptionParser()
 
@@ -40,6 +41,8 @@ Channel=options.channel;
 ##### FUNCTION DEFINITION
 ######################################################
 
+
+'''
 
 
 
@@ -267,7 +270,7 @@ def print_boxed_string_File(in_string_vector,out_file):
 
 
 
-
+'''
 
 
 
