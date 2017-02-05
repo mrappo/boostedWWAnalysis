@@ -15,6 +15,7 @@ parser.add_option('--batchMode', action="store_true",dest="batchMode",default=Tr
 parser.add_option('--vbf', action="store_true",dest="vbf",default=True)
 parser.add_option('--pseudodata', action="store_true",dest="pseudodata",default=False)
 parser.add_option('--copyDC', action="store_true",dest="copyDC",default=True)
+parser.add_option('--UnBlind', action="store_true",dest="UnBlind",default=True)
 (options, args) = parser.parse_args()
 
 currentDir = os.getcwd();
@@ -42,18 +43,26 @@ Channel=options.channel;
 
 def readVBFCutsFile():
     textName="VBF_CutListFile.txt";
+    
+    if options.UnBlind:
+       tmp_blind_dirName_r="UnBlind/";
+    
+    else:
+       tmp_blind_dirName_r="Blind/";
+    
+    
     if options.pseudodata:
        
        if options.vbf:
-          in_VBFCutsFile="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/pseudoData/Lumi_%s_VBF/%s_Channel/"%(options.ntuple,str("%.0f"%options.lumi),options.channel)+textName;
+          in_VBFCutsFile="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/pseudoData/Lumi_%s_VBF/%s_Channel/%s"%(options.ntuple,str("%.0f"%options.lumi),options.channel,tmp_blind_dirName_r)+textName;
        else:
-          in_VBFCutsFile="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/pseudoData/Lumi_%s/%s_Channel/"%(options.ntuple,str("%.0f"%options.lumi),options.channel)+textName;
+          in_VBFCutsFile="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/pseudoData/Lumi_%s/%s_Channel/%s"%(options.ntuple,str("%.0f"%options.lumi),options.channel,tmp_blind_dirName_r)+textName;
     
     else:
        if options.vbf:
-          in_VBFCutsFile="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/trueData/Lumi_%s_VBF/%s_Channel/"%(options.ntuple,str("%.0f"%options.lumi),options.channel)+textName;
+          in_VBFCutsFile="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/trueData/Lumi_%s_VBF/%s_Channel/%s"%(options.ntuple,str("%.0f"%options.lumi),options.channel,tmp_blind_dirName_r)+textName;
        else:
-          in_VBFCutsFile="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/trueData/Lumi_%s/%s_Channel/"%(options.ntuple,str("%.0f"%options.lumi),options.channel)+textName;    
+          in_VBFCutsFile="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/trueData/Lumi_%s/%s_Channel/%s"%(options.ntuple,str("%.0f"%options.lumi),options.channel,tmp_blind_dirName_r)+textName;    
 
     tmp_VBFCutsFile=open(in_VBFCutsFile, 'r');
     readedLines=tmp_VBFCutsFile.readlines();
@@ -276,6 +285,12 @@ if __name__ == '__main__':
            pd1.wait();
     
     
+    if options.UnBlind:
+       tmp_blind_dirName="UnBlind";
+    
+    else:
+       tmp_blind_dirName="Blind";
+    
     ##### VBF PROCESS
     if options.vbf:
     
@@ -316,7 +331,7 @@ if __name__ == '__main__':
                          pd2T.wait();
           
                   #../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_WWTree_22sep_jecV7_lowmass/trueData/Lumi_2300_VBF/
-                  datacards_dir_in="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/trueData/Lumi_%s_VBF/%s_Channel/DEta%1.3f_Mjj_%.0f/cards_%s_%s_VBF"%(options.ntuple,lumi_str,options.channel,CutValue[0],CutValue[1],options.channel,options.category);
+                  datacards_dir_in="../../../CMSSW_5_3_13/src/EXOVVFitter/Ntuple_%s/trueData/Lumi_%s_VBF/%s_Channel/%s/DEta%1.3f_Mjj_%.0f/cards_%s_%s_VBF"%(options.ntuple,lumi_str,options.channel,tmp_blind_dirName,CutValue[0],CutValue[1],options.channel,options.category);
                   lumi_dir=Ntuple_dir_name+"/trueData/Lumi_%s_VBF"%lumi_str;
                   if not os.path.isdir(lumi_dir):
                          #os.system("mkdir "+lumi_dir);
@@ -324,7 +339,7 @@ if __name__ == '__main__':
                          pd2TL.wait();
 
   
-               datacards_dir_out=lumi_dir+"/DEta%1.3f_Mjj_%.0f"%(CutValue[0],CutValue[1]);
+               datacards_dir_out=lumi_dir+"/%s_Channel/%s/DEta%1.3f_Mjj_%.0f"%(options.channel,tmp_blind_dirName,CutValue[0],CutValue[1]);
                               
                if not options.copyDC:
                       if not os.path.isdir(datacards_dir_out):
