@@ -105,12 +105,15 @@ parser.add_option('--sample', action="store",type="string",dest="sample",default
 #parser.add_option('--interpolate', action="store_true",dest="interpolate",default=False)
 #parser.add_option('--batchMode', action="store_true",dest="batchMode",default=False)
 parser.add_option('--vbf', action="store_true",dest="VBF_process",default=False)
+parser.add_option('--mPDF', action="store_true",dest="mPDF",default=False)
 
 
 
 
 (options, args) = parser.parse_args()
-
+print "\n\n\nMATTEOPROVA"
+print options.mPDF
+print options.fullCLs
 #############################################
 ######### Get Some Global Variables #########
 #############################################
@@ -929,7 +932,7 @@ def makeSMLimitPlot(SIGCH,cprime = 10, brnew = 00):
     curGraph_2s.Draw("F");
     curGraph_1s.Draw("Fsame");
     
-    if not options.blindObservedLine : curGraph_obs.Draw("PCsame"); # MATTEO CHANGED
+    if not options.blindObservedLine : curGraph_obs.Draw("LPsame");#PCsame"); # MATTEO CHANGED
     #curGraph_obs.Draw("PCsame");
     
     curGraph_exp.Draw("LPsame");
@@ -1104,7 +1107,7 @@ def makeSMXsecPlot(SIGCH,cprime = 10, brnew = 00):
                    
     curGraph_2s.Draw("F");
     curGraph_1s.Draw("Fsame");
-    if not options.blindObservedLine : curGraph_obs.Draw("PCsame");
+    if not options.blindObservedLine : curGraph_obs.Draw("LPsame");#PCsame");
     curGraph_exp.Draw("LPsame");
     curGraph_xsec.Draw("LPsame");
 #    oneLine.Draw("same");
@@ -3351,11 +3354,28 @@ if __name__ == '__main__':
                     ###############################
                     #### Asymptotic Limit part  ###
                     ###############################
+                    #-M HybridNew --frequentist
+                    #MATTEO COMMANDS
+                    elif (options.mPDF and options.systematics == 1 and not options.computePvalue == 1 and not options.computeSignif == 1 and not options.makeLikelihoodScan == 1 ):
+                       runCmmd = "combine -M HybridNew --frequentist --minimizerAlgo Minuit2 -n wwlvj_BulkGraviton_newxsec%03d_%s%s_HP_unbin -m %03d -d wwlvj_BulkGraviton_newxsec%03d_%s%s_HP_unbin.txt %s -v 2"%(mass[i],options.channel,SIGCH,mass[i],mass[i],options.channel,SIGCH,moreCombineOpts);
+                       print "runCmmd ",runCmmd ;
+                                            
+                       
+                       print "\n\n---------- MATTEO mPDF -------------\n\n"
 
+                       if options.batchMode:
+                        fn = "combineScript_%s_%03d%s_HP"%(options.channel,mass[i],SIGCH);
+                        cardStem = "wwlvj_BulkGraviton_newxsec%03d_em%s_HP"%(mass[i],SIGCH);
+                        submitBatchJobCombine( runCmmd, fn, mass[i], cprime[j], BRnew[k] );
+                       else: 
+                        os.system(runCmmd);
+                    
                     elif options.systematics == 1 and not options.computePvalue == 1 and not options.computeSignif == 1 and not options.makeLikelihoodScan == 1:
                        runCmmd = "combine -M Asymptotic --minimizerAlgo Minuit2 --minosAlgo stepping -n wwlvj_BulkGraviton_newxsec%03d_%s%s_HP_unbin -m %03d -d wwlvj_BulkGraviton_newxsec%03d_%s%s_HP_unbin.txt %s -v 2"%(mass[i],options.channel,SIGCH,mass[i],mass[i],options.channel,SIGCH,moreCombineOpts);
                        print "runCmmd ",runCmmd ;
-                       print "\n\n---------- MATTEO CHECK -------------\n\n"
+                                            
+                       
+                       print "\n\n---------- MATTEO normal -------------\n\n"
 
                        if options.batchMode:
                         fn = "combineScript_%s_%03d%s_HP"%(options.channel,mass[i],SIGCH);

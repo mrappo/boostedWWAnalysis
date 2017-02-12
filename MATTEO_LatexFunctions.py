@@ -87,9 +87,10 @@ def selectDEtaEvent(cutVector):
            j=j+1;
            
     vectorLenght=int(j);
+    print vectorLenght
     
     i=j=0;
-    outVector=[0.0 for i in range(vectorLenght)];
+    outVector=[0.0 for i in range(vectorLenght+1)];
     
     i=j=0;
     for i in cutVector:
@@ -98,6 +99,7 @@ def selectDEtaEvent(cutVector):
         
         if tmp0==Deta:
            outVector[j]=[tmp0,tmp1];
+           print j
            print outVector[j]
            j=j+1;    
     return [vectorLenght,outVector];

@@ -1037,7 +1037,7 @@ if __name__ == '__main__':
                    else:
                       canvasFileName=final_dir+"/Higgs650_1SigmaUp.pdf";
                       tmp1_graph_1Sigma_up.SetTitle("Higgs 650 1Sigma Up");
-                   tmp1_graph_1Sigma_up.Draw("LEGO2Z");
+                   tmp1_graph_1Sigma_up.Draw("COLZ");
                    tmp_canvas11.SaveAs(canvasFileName);
                    #raw_input('Press Enter to exit')
                    
@@ -1062,7 +1062,7 @@ if __name__ == '__main__':
                    else:
                       canvasFileName=final_dir+"/Higgs650_2SigmaUp.pdf";
                       tmp1_graph_2Sigma_up.SetTitle("Higgs 650 2Sigma Up");
-                   tmp1_graph_2Sigma_up.Draw("LEGO2Z");
+                   tmp1_graph_2Sigma_up.Draw("COLZ");
                    tmp_canvas12.SaveAs(canvasFileName);
                    
                    
@@ -1087,7 +1087,7 @@ if __name__ == '__main__':
                    else:
                       canvasFileName=final_dir+"/Higgs650_2SigmaDown.pdf";
                       tmp1_graph_2Sigma_down.SetTitle("Higgs 650 2Sigma Down");
-                   tmp1_graph_2Sigma_down.Draw("LEGO2Z");
+                   tmp1_graph_2Sigma_down.Draw("COLZ");
                    tmp_canvas13.SaveAs(canvasFileName);
                   
                    
@@ -1112,7 +1112,7 @@ if __name__ == '__main__':
                    else:
                       canvasFileName=final_dir+"/Higgs650_1SigmaDown.pdf";
                       tmp1_graph_1Sigma_down.SetTitle("Higgs 650 1Sigma Down");
-                   tmp1_graph_1Sigma_down.Draw("LEGO2Z");
+                   tmp1_graph_1Sigma_down.Draw("COLZ");
                    tmp_canvas14.SaveAs(canvasFileName);
                    
                    
@@ -1137,7 +1137,7 @@ if __name__ == '__main__':
                    else:
                       canvasFileName=final_dir+"/Higgs650_observed.pdf";
                       tmp1_graph_observed.SetTitle("Higgs 650 Observed");
-                   tmp1_graph_observed.Draw("LEGO2Z");
+                   tmp1_graph_observed.Draw("COLZ");
                    tmp_canvas15.SaveAs(canvasFileName);
                    
                    
@@ -1162,7 +1162,7 @@ if __name__ == '__main__':
                    else:
                       canvasFileName=final_dir+"/Higgs650_expected.pdf";
                       tmp1_graph_expected.SetTitle("Higgs 650 Expected");
-                   tmp1_graph_expected.Draw("LEGO2Z");
+                   tmp1_graph_expected.Draw("COLZ");
                    tmp_canvas16.SaveAs(canvasFileName);
                    
                    
@@ -1192,7 +1192,7 @@ if __name__ == '__main__':
                    else:
                       canvasFileName=final_dir+"/Higgs1000_1SigmaUp.pdf";
                       tmp2_graph_1Sigma_up.SetTitle("Higgs 1000 1Sigma Up");
-                   tmp2_graph_1Sigma_up.Draw("LEGO2Z");
+                   tmp2_graph_1Sigma_up.Draw("COLZ");
                    tmp_canvas21.SaveAs(canvasFileName);
                    
                    
@@ -1217,7 +1217,7 @@ if __name__ == '__main__':
                    else:
                       canvasFileName=final_dir+"/Higgs1000_2SigmaUp.pdf";
                       tmp2_graph_2Sigma_up.SetTitle("Higgs 1000 2Sigma Up");
-                   tmp2_graph_2Sigma_up.Draw("LEGO2Z");
+                   tmp2_graph_2Sigma_up.Draw("COLZ");
                    tmp_canvas22.SaveAs(canvasFileName);
                    
                    
@@ -1242,7 +1242,7 @@ if __name__ == '__main__':
                    else:
                       canvasFileName=final_dir+"/Higgs1000_2SigmaDown.pdf";
                       tmp2_graph_2Sigma_down.SetTitle("Higgs 1000 2Sigma Down");
-                   tmp2_graph_2Sigma_down.Draw("LEGO2Z");
+                   tmp2_graph_2Sigma_down.Draw("COLZ");
                    tmp_canvas23.SaveAs(canvasFileName);
                   
                    
@@ -1267,7 +1267,7 @@ if __name__ == '__main__':
                    else:
                       canvasFileName=final_dir+"/Higgs1000_1SigmaDown.pdf";
                       tmp2_graph_1Sigma_down.SetTitle("Higgs 1000 1Sigma Down");
-                   tmp2_graph_1Sigma_down.Draw("LEGO2Z");
+                   tmp2_graph_1Sigma_down.Draw("COLZ");
                    tmp_canvas24.SaveAs(canvasFileName);
                    
                    
@@ -1292,7 +1292,7 @@ if __name__ == '__main__':
                    else:
                       canvasFileName=final_dir+"/Higgs1000_observed.pdf";
                       tmp2_graph_observed.SetTitle("Higgs Observed");
-                   tmp2_graph_observed.Draw("LEGO2Z");
+                   tmp2_graph_observed.Draw("COLZ");
                    tmp_canvas25.SaveAs(canvasFileName);
                    
                    
@@ -1318,7 +1318,7 @@ if __name__ == '__main__':
                    else:
                       canvasFileName=final_dir+"/Higgs1000_expected.pdf";
                       tmp2_graph_expected.SetTitle("Higgs 1000 Expected");
-                   tmp2_graph_expected.Draw("LEGO2Z");
+                   tmp2_graph_expected.Draw("COLZ");
                    tmp_canvas26.SaveAs(canvasFileName);
                 
                 
@@ -1341,7 +1341,7 @@ if __name__ == '__main__':
                    gPad.Update();
                    canvasFileName=final_dir+"/BulkGraviton1000_1SigmaUp.pdf";
                    tmp3_graph_1Sigma_up.SetTitle("BulkGraviton 1000 1Sigma Up");
-                   tmp3_graph_1Sigma_up.Draw("LEGO2Z");
+                   tmp3_graph_1Sigma_up.Draw("COLZ");
                    tmp_canvas31.SaveAs(canvasFileName);
                    
                    
@@ -1362,7 +1362,7 @@ if __name__ == '__main__':
                    gPad.Update();
                    canvasFileName=final_dir+"/BulkGraviton1000_2SigmaUp.pdf";
                    tmp3_graph_2Sigma_up.SetTitle("BulkGraviton 1000 2Sigma Up");
-                   tmp3_graph_2Sigma_up.Draw("LEGO2Z");
+                   tmp3_graph_2Sigma_up.Draw("COLZ");
                    tmp_canvas32.SaveAs(canvasFileName);
                    
                    
@@ -1383,7 +1383,7 @@ if __name__ == '__main__':
                    gPad.Update();
                    canvasFileName=final_dir+"/BulkGraviton1000_2SigmaDown.pdf";
                    tmp3_graph_2Sigma_down.SetTitle("BulkGraviton 1000 2Sigma Down");
-                   tmp3_graph_2Sigma_down.Draw("LEGO2Z");
+                   tmp3_graph_2Sigma_down.Draw("COLZ");
                    tmp_canvas33.SaveAs(canvasFileName);
                   
                    
@@ -1404,7 +1404,7 @@ if __name__ == '__main__':
                    gPad.Update();
                    canvasFileName=final_dir+"/BulkGraviton1000_1SigmaDown.pdf";
                    tmp3_graph_1Sigma_down.SetTitle("BulkGraviton 1000 1Sigma Down");
-                   tmp3_graph_1Sigma_down.Draw("LEGO2Z");
+                   tmp3_graph_1Sigma_down.Draw("COLZ");
                    tmp_canvas34.SaveAs(canvasFileName);
                    
                    
@@ -1425,7 +1425,7 @@ if __name__ == '__main__':
                    gPad.Update();
                    canvasFileName=final_dir+"/BulkGraviton1000_observed.pdf";
                    tmp3_graph_observed.SetTitle("BulkGraviton 1000 Observed");
-                   tmp3_graph_observed.Draw("LEGO2Z");
+                   tmp3_graph_observed.Draw("COLZ");
                    tmp_canvas35.SaveAs(canvasFileName);
                    
                    
@@ -1445,7 +1445,7 @@ if __name__ == '__main__':
                    gPad.SetPhi(phi_angle); # default is 30
                    gPad.Update();
                    canvasFileName=final_dir+"/BulkGraviton1000_expected.pdf";
-                   tmp3_graph_expected.SetTitle("BulkGraviton 1000 Expected");tmp3_graph_expected.Draw("LEGO2Z");
+                   tmp3_graph_expected.SetTitle("BulkGraviton 1000 Expected");tmp3_graph_expected.Draw("COLZ");
                    tmp_canvas36.SaveAs(canvasFileName);
             
 
@@ -1516,7 +1516,7 @@ if __name__ == '__main__':
     #gPad.SetPhi(170); # default is 30
     gPad.Update();
     graph_val.SetTitle("TTBar ScaleFactor for DataCard")
-    graph_val.Draw("LEGO2Z");
+    graph_val.Draw("COLZ");
     #graph_val.Draw("SURF3");
     
     #graph_val.Draw("b lego1");

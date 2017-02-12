@@ -16,6 +16,8 @@ parser.add_option('--ntuple', action="store",type="string",dest="ntuple",default
 parser.add_option('--sample', action="store",type="string",dest="sample",default="BulkGraviton")
 parser.add_option('--vbf', action="store_true",dest="VBF_process",default=False)
 parser.add_option('--UnBlind', action="store_true",dest="UnBlind",default=False)
+parser.add_option('--mPDF', action="store_true",dest="mPDF",default=False)
+parser.add_option('--fullCLs', action="store_true",dest="fullCLs",default=False)
 (options, args) = parser.parse_args()
 
 currentDir = os.getcwd();
@@ -36,18 +38,64 @@ if __name__ == '__main__':
     dataOutputFileName=options.datacardDIR+"/DataLimits.txt";
     dataOutputFile=open(dataOutputFileName,'w+');
     
-    if not options.channel=="mu":
+    # em combined channel
+    if options.channel=="em":
+       
        if options.UnBlind:
-          pMKLimLog = subprocess.Popen(['python','MATTEO_LimitsCode.py','-b','--computeLimits','--channel',options.channel,'--datacardDIR',options.datacardDIR,'--makeSMLimitPlot','1','--plotLimits','1','--systematics','1','--sample',options.sample,'--vbf','TRUE','--blindObservedLine','0','--jetBin','_2jet'],stdout=subprocess.PIPE,stderr=output_log2);
+          if options.fullCLs:
+             pMKLimLog = subprocess.Popen(['python','MATTEO_LimitsCode.py','-b','--computeLimits','--channel',options.channel,'--datacardDIR',options.datacardDIR,'--makeSMLimitPlot','1','--plotLimits','1','--systematics','1','--sample',options.sample,'--vbf','TRUE','--blindObservedLine','0','--jetBin','_2jet','--fullCLs','True'],stdout=subprocess.PIPE,stderr=output_log2);
+             
+             
+          elif options.mPDF:
+             pMKLimLog = subprocess.Popen(['python','MATTEO_LimitsCode.py','-b','--computeLimits','--channel',options.channel,'--datacardDIR',options.datacardDIR,'--makeSMLimitPlot','1','--plotLimits','1','--systematics','1','--sample',options.sample,'--vbf','TRUE','--blindObservedLine','0','--jetBin','_2jet','--mPDF','True'],stdout=subprocess.PIPE,stderr=output_log2);
+          else:
+             pMKLimLog = subprocess.Popen(['python','MATTEO_LimitsCode.py','-b','--computeLimits','--channel',options.channel,'--datacardDIR',options.datacardDIR,'--makeSMLimitPlot','1','--plotLimits','1','--systematics','1','--sample',options.sample,'--vbf','TRUE','--blindObservedLine','0','--jetBin','_2jet'],stdout=subprocess.PIPE,stderr=output_log2);
+       
+       
+       
        else:
-          pMKLimLog = subprocess.Popen(['python','MATTEO_LimitsCode.py','-b','--computeLimits','--channel',options.channel,'--datacardDIR',options.datacardDIR,'--makeSMLimitPlot','1','--plotLimits','1','--systematics','1','--sample',options.sample,'--vbf','TRUE','--blindObservedLine','1','--jetBin','_2jet'],stdout=subprocess.PIPE,stderr=output_log2);
+          if options.fullCLs:
+             pMKLimLog = subprocess.Popen(['python','MATTEO_LimitsCode.py','-b','--computeLimits','--channel',options.channel,'--datacardDIR',options.datacardDIR,'--makeSMLimitPlot','1','--plotLimits','1','--systematics','1','--sample',options.sample,'--vbf','TRUE','--blindObservedLine','1','--jetBin','_2jet','--fullCLs','True'],stdout=subprocess.PIPE,stderr=output_log2);
+             
+             
+          elif options.mPDF:
+             pMKLimLog = subprocess.Popen(['python','MATTEO_LimitsCode.py','-b','--computeLimits','--channel',options.channel,'--datacardDIR',options.datacardDIR,'--makeSMLimitPlot','1','--plotLimits','1','--systematics','1','--sample',options.sample,'--vbf','TRUE','--blindObservedLine','1','--jetBin','_2jet','--mPDF','True'],stdout=subprocess.PIPE,stderr=output_log2);
+          else:
+             pMKLimLog = subprocess.Popen(['python','MATTEO_LimitsCode.py','-b','--computeLimits','--channel',options.channel,'--datacardDIR',options.datacardDIR,'--makeSMLimitPlot','1','--plotLimits','1','--systematics','1','--sample',options.sample,'--vbf','TRUE','--blindObservedLine','1','--jetBin','_2jet'],stdout=subprocess.PIPE,stderr=output_log2);
+          
+          
+          #pMKLimLog = subprocess.Popen(['python','MATTEO_LimitsCode.py','-b','--computeLimits','--channel',options.channel,'--datacardDIR',options.datacardDIR,'--makeSMLimitPlot','1','--plotLimits','1','--systematics','1','--sample',options.sample,'--vbf','TRUE','--blindObservedLine','1','--jetBin','_2jet'],stdout=subprocess.PIPE,stderr=output_log2);
     
+    
+    
+    
+    
+    
+    # e only and mu only channel
     else:
        if options.UnBlind:
-          pMKLimLog = subprocess.Popen(['python','MATTEO_LimitsCode.py','-b','--computeLimits','--channel',options.channel,'--datacardDIR',options.datacardDIR,'--makeSMLimitPlot','1','--plotLimits','1','--systematics','1','--sample',options.sample,'--vbf','TRUE','--blindObservedLine','0'],stdout=subprocess.PIPE,stderr=output_log2);
+          
+          if options.fullCLs:
+             pMKLimLog = subprocess.Popen(['python','MATTEO_LimitsCode.py','-b','--computeLimits','--channel',options.channel,'--datacardDIR',options.datacardDIR,'--makeSMLimitPlot','1','--plotLimits','1','--systematics','1','--sample',options.sample,'--vbf','TRUE','--blindObservedLine','0','--fullCLs','True'],stdout=subprocess.PIPE,stderr=output_log2);
+          
+          elif options.mPDF:
+             pMKLimLog = subprocess.Popen(['python','MATTEO_LimitsCode.py','-b','--computeLimits','--channel',options.channel,'--datacardDIR',options.datacardDIR,'--makeSMLimitPlot','1','--plotLimits','1','--systematics','1','--sample',options.sample,'--vbf','TRUE','--blindObservedLine','0','--mPDF','True'],stdout=subprocess.PIPE,stderr=output_log2);
+          
+          else:
+             pMKLimLog = subprocess.Popen(['python','MATTEO_LimitsCode.py','-b','--computeLimits','--channel',options.channel,'--datacardDIR',options.datacardDIR,'--makeSMLimitPlot','1','--plotLimits','1','--systematics','1','--sample',options.sample,'--vbf','TRUE','--blindObservedLine','0'],stdout=subprocess.PIPE,stderr=output_log2);
 
        else:
-          pMKLimLog = subprocess.Popen(['python','MATTEO_LimitsCode.py','-b','--computeLimits','--channel',options.channel,'--datacardDIR',options.datacardDIR,'--makeSMLimitPlot','1','--plotLimits','1','--systematics','1','--sample',options.sample,'--vbf','TRUE','--blindObservedLine','1'],stdout=subprocess.PIPE,stderr=output_log2);
+          if options.fullCLs:
+             pMKLimLog = subprocess.Popen(['python','MATTEO_LimitsCode.py','-b','--computeLimits','--channel',options.channel,'--datacardDIR',options.datacardDIR,'--makeSMLimitPlot','1','--plotLimits','1','--systematics','1','--sample',options.sample,'--vbf','TRUE','--blindObservedLine','1','--fullCLs','True'],stdout=subprocess.PIPE,stderr=output_log2);
+          
+          elif options.mPDF:
+             pMKLimLog = subprocess.Popen(['python','MATTEO_LimitsCode.py','-b','--computeLimits','--channel',options.channel,'--datacardDIR',options.datacardDIR,'--makeSMLimitPlot','1','--plotLimits','1','--systematics','1','--sample',options.sample,'--vbf','TRUE','--blindObservedLine','1','--mPDF','True'],stdout=subprocess.PIPE,stderr=output_log2);
+          
+          else:
+             pMKLimLog = subprocess.Popen(['python','MATTEO_LimitsCode.py','-b','--computeLimits','--channel',options.channel,'--datacardDIR',options.datacardDIR,'--makeSMLimitPlot','1','--plotLimits','1','--systematics','1','--sample',options.sample,'--vbf','TRUE','--blindObservedLine','1'],stdout=subprocess.PIPE,stderr=output_log2);
+          
+          
+          #pMKLimLog = subprocess.Popen(['python','MATTEO_LimitsCode.py','-b','--computeLimits','--channel',options.channel,'--datacardDIR',options.datacardDIR,'--makeSMLimitPlot','1','--plotLimits','1','--systematics','1','--sample',options.sample,'--vbf','TRUE','--blindObservedLine','1'],stdout=subprocess.PIPE,stderr=output_log2);
 
     
     
@@ -60,7 +108,7 @@ if __name__ == '__main__':
     line_to_read=7;
     Final_line_to_read=0;
     for line in pMKLimLog.stdout:
-        #sys.stdout.write(line)
+        sys.stdout.write(line)
         output_log1.write(line)
        
         string_to_split=["bserved Limit: r <","xpected  2.5%: r < ","xpected 16.0%: r < ","xpected 50.0%: r < ","xpected 84.0%: r < ","xpected 97.5%: r < "];
