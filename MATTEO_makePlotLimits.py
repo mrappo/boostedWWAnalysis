@@ -32,6 +32,8 @@ parser.add_option('--pseudodata', action="store_true",dest="pseudodata",default=
 parser.add_option('--lumi', action="store",type="float",dest="lumi",default=2300.0)
 parser.add_option('--CrossCuts', action="store_true",dest="CrosCuts",default=True)
 parser.add_option('--UnBlind', action="store_true",dest="UnBlind",default=False)
+parser.add_option('--mPDF', action="store_true",dest="mPDF",default=False)
+parser.add_option('--fullCLs', action="store_true",dest="fullCLs",default=False)
 #parser.add_option('--SignleCuts', action="store_true",dest="SingleCuts",default=False)
 #parser.add_option('--MultipleCuts', action="store_true",dest="MultipleCuts",default=False)
 (options, args) = parser.parse_args()
@@ -330,14 +332,19 @@ def print_boxed_string_File(in_string_vector,out_file_name):
     
 Sample=["BulkGraviton","Higgs"];
 Ndata=6;
+
+
+
 ## DeltaEta Cut
-Deta=[0.0,0.25,0.5,0.75,1.0,1.25,1.5,1.75,2.0,2.25,2.5,2.75,3.0];
-   
+Deta=[0.0,0.2,0.4,0.6,0.8,1.0,1.2,1.4,1.6,1.8,2.0,2.2,2.4,2.6,2.8,3.0];   
+
+
 # Mjj Cut
-Mjj=[0.0,25.0,50.0,75.0,100.0,125.0,150.0,175.0,200.0,225.0,250.0,275.0,300.0,325.0];
-#Deta=[0.0,1.0,1.5,2.0,2.5,3.0];
-#Mjj=[0.0,100.0,150.0,200.0,250.0,300.0];
-    
+Mjj=[0.0,20.0,40.0,60.0,80.0,100.0,120.0,140.0,160.0,180.0,200.0,220.0,240.0,260.0,280.0,300.0,320.0,340.0];
+
+
+
+
 ########################################################
 #### Main Code
 ########################################################
@@ -354,14 +361,26 @@ if __name__ == '__main__':
     else:
        tmp_blind_dirName="Blind";
     
+    if options.mPDF and options.fullCLs:
+       print "\n ERROR: both mPDF and fullCLs options!!!"
+       sys.exit();
+       
+    if options.mPDF:
+       typename="mPDF";
+    
+    elif options.fullCLs:
+       typename="fullCLs";
+    
+    else:
+       typename="normal";
     
     if options.pseudodata:
        pseudodata_dir=Ntuple_dir_name+"/pseudoData"
-       lumi_dir=Ntuple_dir_name+"/pseudoData/Lumi_%.0f_VBF/%s_Channel/%s"%(options.lumi,options.channel,tmp_blind_dirName);
+       lumi_dir=Ntuple_dir_name+"/pseudoData/Lumi_%.0f_VBF/%s_Channel/%s/%s"%(options.lumi,options.channel,tmp_blind_dirName,typename);
                 
     else:
        truedata_dir=Ntuple_dir_name+"/trueData"
-       lumi_dir=Ntuple_dir_name+"/trueData/Lumi_%.0f_VBF/%s_Channel/%s"%(options.lumi,options.channel,tmp_blind_dirName);
+       lumi_dir=Ntuple_dir_name+"/trueData/Lumi_%.0f_VBF/%s_Channel/%s/%s"%(options.lumi,options.channel,tmp_blind_dirName,typename);
     
     final_dir=lumi_dir+"/PlotsExclusionLimit";
     if not os.path.isdir(final_dir):

@@ -18,9 +18,21 @@ parser.add_option('--copyDC', action="store_true",dest="copyDC",default=True)
 parser.add_option('--UnBlind', action="store_true",dest="UnBlind",default=False)
 parser.add_option('--mPDF', action="store_true",dest="mPDF",default=False)
 parser.add_option('--fullCLs', action="store_true",dest="fullCLs",default=False)
+parser.add_option('--CrossCuts', action="store_true",dest="CrosCuts",default=True)
 (options, args) = parser.parse_args()
 
 currentDir = os.getcwd();
+
+
+## DeltaEta Cut
+DEta_values=[1.6];
+#DEta_values=[0.0,0.2,0.4,0.6,0.8,1.0,1.2,1.4,1.6,1.8,2.0,2.2,2.4,2.6,2.8,3.0];
+
+
+
+# Mjj Cut
+DMjj_values=[260.0];
+#DMjj_values=[0.0,20.0,40.0,60.0,80.0,100.0,120.0,140.0,160.0,180.0,200.0,220.0,240.0,260.0,280.0,300.0,320.0,340.0];
 
 
 
@@ -299,10 +311,110 @@ if __name__ == '__main__':
     
     ##### VBF PROCESS
     if options.vbf:
+       
+       
+       # Count number of DeltaEtajj Cuts
+       n_eta=0;
+       i=0;
+       for i in DEta_values:
+           n_eta=n_eta+1;
+           print "Deta: %f \t\t n_eta: %.0f"%(i,n_eta)
+       
+       n_eta=int(n_eta);
+       
+       
+         
     
+       # Count number of Mjj Cuts
+       n_mjj=0;
+       i=0;
+       for i in DMjj_values:
+           n_mjj=n_mjj+1;
+           print "DMjj: %f \t\t n_mjj: %.0f"%(i,n_mjj)
+        
+       n_mjj=int(n_mjj);
+       
+       
+       
+       
+       
+       
+       
+       
+       # Store all cuts in a Vector: index 0 -> DEltaEta Cut
+       #                             index 1 -> Mjj Cut
+       if options.CrosCuts:
+          print "\nCROSS CUTS\n"
+          i=j=0;
+          range_value=int((n_mjj*n_eta));
+          print range_value
+          VBF_cut_values=[0.0 for i in range(range_value)];
+                    
+          i=j=0;
+          for i in range(n_mjj):
+                 j=0;
+                 for j in range(n_eta):
+                     tmp=(i*(n_eta)+j);
+                     VBF_cut_values[tmp]=[float("%1.3f"%DEta_values[j]),float("%.0f"%DMjj_values[i])];
+                     #tmp_TTB_SF=get_ScaleFactor(float("%1.3f"%DEta_values[j]),float("%.0f"%DMjj_values[i]),ControlP_Dir_2,outputFileName);
+                     #VBF_cut_values[tmp]=tmp_TTB_SF;
+
+           
+           
+      
+              
+       else:
+          print "\nSINGLE CUTS\n"
+          i=j=0;
+
+          range_value=int(n_mjj+n_eta-1);
+          VBF_cut_values=[0.0 for i in range(range_value)];          
+
+          i=j=0;
+          for i in range(n_eta):
+              #tmp_TTB_SF=get_ScaleFactor(float("%1.3f"%DEta_values[i]),0.0,ControlP_Dir_2,outputFileName);
+              #print "\n"
+              #print tmp_TTB_SF
+              VBF_cut_values[i]=[float("%1.3f"%DEta_values[i]),0.0];
+          
+          for j in range(n_mjj-1):
+              #tmp_TTB_SF=get_ScaleFactor(0.0,float("%.0f"%DMjj_values[j+1]),ControlP_Dir_2,outputFileName);
+              #print "\n"
+              #print tmp_TTB_SF
+              VBF_cut_values[n_eta+j]=[0.0,float("%.0f"%DMjj_values[j+1])];
+       
+       
+       
+
+       
+
+       # Check the CutsVector
+       i=0;
+       print "\n\nVector of Cut Values:\n"
+       print "Total CutsNumber: %.0f"%range_value
+       print "\n"
+       for i in range(range_value):
+           i=int(i);
+           tmp=VBF_cut_values[i];
+           DEta_tmp=tmp[0];
+           Mjj_tmp=tmp[1];
+           DEta_local=float(DEta_tmp);
+           Mjj_local=float(Mjj_tmp);
+           print " %.0f)  DEta: %1.3f \t\t Mjj: %.1f\n"%((i+1),DEta_local,Mjj_local)
+       
+       
+       
+       
+       '''
        CutInputValues=readVBFCutsFile();
        CutInputNumber=CutInputValues[0];
        CutInputVector=CutInputValues[1];
+       '''
+       
+       
+       #CutInputValues=readVBFCutsFile();
+       CutInputNumber=range_value
+       CutInputVector=VBF_cut_values
        
        #CutInputVector=[[0.0,0.0],[1.0,0.0]];
        
@@ -441,6 +553,8 @@ if __name__ == '__main__':
                        mass=str(m);
             
                        # FOR 18feb DATACARD
+
+                       
                        '''
                        if (options.ntuple=="WWTree_18feb_jecV7_lowmass" and sample=="BulkGraviton"):
                           datacard_file_in=datacards_dir_out+"/cards_%s_%s/%s/wwlvj_%s%s_newxsec%s_%s_%s_lumi_%s_unbin.txt"%(options.channel,options.category,sample,sample,mass,options.channel,options.category,lumi_str)
@@ -577,7 +691,7 @@ if __name__ == '__main__':
                       #os.system("chmod 777 "+currentDir+"/"+fn+".sh");
                       
                       
-                      pMKLimBatch2 = subprocess.Popen(['bsub','-q','1nw','-cwd',currentDir,dir_tmp1]);
+                      pMKLimBatch2 = subprocess.Popen(['bsub','-q','1nh','-cwd',currentDir,dir_tmp1]);
                       pMKLimBatch2.wait();
                       #os.system("bsub -q cmscaf1nd -cwd "+currentDir+" "+currentDir+"/"+fn+".sh");
                       
