@@ -5,7 +5,8 @@ import subprocess
 from ROOT import *
 import ROOT
 import array, math
-
+import os.path
+import shlex
 parser = OptionParser()
 
 parser.add_option('-c', '--channel',action="store",type="string",dest="channel",default="em")
@@ -34,6 +35,9 @@ if __name__ == '__main__':
     
     mass_str= str("%.0f"%options.mass);
     nameIn=options.sample+mass_str;
+    
+
+    
     
     points=[]
     for p in range(1,10):
@@ -75,7 +79,7 @@ if __name__ == '__main__':
         output_log2=open(outFileFullCLs_err,'w+');
         #print str(points[i])
         
-        pd_tmp = subprocess.Popen(['combine',datacardName,'-M','HybridNew','--frequentist','--clsAcc','0','-T','100','-i','30','--singlePoint',str(points[i]),'-s',seed_vector[i],'--saveHybridResult','--saveToys','-m',mass_str,'-n',nameIn,'-v','2'],stdout=subprocess.PIPE,stderr=output_log2);
+        pd_tmp = subprocess.Popen(['combine','-d',datacardName,'-M','HybridNew','--frequentist','--clsAcc','0','-T','100','-i','30','--singlePoint',str(points[i]),'-s',seed_vector[i],'--saveHybridResult','--saveToys','-m',mass_str,'-n',nameIn,'-v','2'],stdout=subprocess.PIPE,stderr=output_log2);
     
     
         for line in pd_tmp.stdout:
@@ -117,27 +121,27 @@ if __name__ == '__main__':
            pd1=subprocess.Popen(['mkdir',data_log_dir]);
            pd1.wait();
            
-    outFileFullCLs_0_0=data_log_dir+"/FullClsSTDOUT_hadd"+options.sample+mass_str+str(points[i])+".log";   
-    outFileFullCLs_0_1=data_log_dir+"/FullClsSTDERR_hadd"+options.sample+mass_str+str(points[i])+".log";
+    outFileFullCLs_0_0=data_log_dir+"/FullClsSTDOUT_hadd"+options.sample+mass_str+".log";   
+    outFileFullCLs_0_1=data_log_dir+"/FullClsSTDERR_hadd"+options.sample+mass_str+".log";
     
-    outFileFullCLs_1_0=data_log_dir+"/FullClsSTDOUT_1"+options.sample+mass_str+str(points[i])+".log";   
-    outFileFullCLs_1_1=data_log_dir+"/FullClsSTDERR_1"+options.sample+mass_str+str(points[i])+".log";
+    outFileFullCLs_1_0=data_log_dir+"/FullClsSTDOUT_1"+options.sample+mass_str+".log";   
+    outFileFullCLs_1_1=data_log_dir+"/FullClsSTDERR_1"+options.sample+mass_str+".log";
 
-    outFileFullCLs_2_0=data_log_dir+"/FullClsSTDOUT_2"+options.sample+mass_str+str(points[i])+".log";   
-    outFileFullCLs_2_1=data_log_dir+"/FullClsSTDERR_2"+options.sample+mass_str+str(points[i])+".log";
+    outFileFullCLs_2_0=data_log_dir+"/FullClsSTDOUT_2"+options.sample+mass_str+".log";   
+    outFileFullCLs_2_1=data_log_dir+"/FullClsSTDERR_2"+options.sample+mass_str+".log";
 
-    outFileFullCLs_3_0=data_log_dir+"/FullClsSTDOUT_3"+options.sample+mass_str+str(points[i])+".log";   
-    outFileFullCLs_3_1=data_log_dir+"/FullClsSTDERR_3"+options.sample+mass_str+str(points[i])+".log";
+    outFileFullCLs_3_0=data_log_dir+"/FullClsSTDOUT_3"+options.sample+mass_str+".log";   
+    outFileFullCLs_3_1=data_log_dir+"/FullClsSTDERR_3"+options.sample+mass_str+".log";
 
-    outFileFullCLs_4_0=data_log_dir+"/FullClsSTDOUT_4"+options.sample+mass_str+str(points[i])+".log";   
-    outFileFullCLs_4_1=data_log_dir+"/FullClsSTDERR_4"+options.sample+mass_str+str(points[i])+".log";
+    outFileFullCLs_4_0=data_log_dir+"/FullClsSTDOUT_4"+options.sample+mass_str+".log";   
+    outFileFullCLs_4_1=data_log_dir+"/FullClsSTDERR_4"+options.sample+mass_str+".log";
 
-    outFileFullCLs_5_0=data_log_dir+"/FullClsSTDOUT_5"+options.sample+mass_str+str(points[i])+".log";   
-    outFileFullCLs_5_1=data_log_dir+"/FullClsSTDERR_5"+options.sample+mass_str+str(points[i])+".log";
+    outFileFullCLs_5_0=data_log_dir+"/FullClsSTDOUT_5"+options.sample+mass_str+".log";   
+    outFileFullCLs_5_1=data_log_dir+"/FullClsSTDERR_5"+options.sample+mass_str+".log";
 
 
-    outFileFullCLs_6_0=data_log_dir+"/FullClsSTDOUT_6"+options.sample+mass_str+str(points[i])+".log";   
-    outFileFullCLs_6_1=data_log_dir+"/FullClsSTDERR_6"+options.sample+mass_str+str(points[i])+".log";
+    outFileFullCLs_6_0=data_log_dir+"/FullClsSTDOUT_6"+options.sample+mass_str+".log";   
+    outFileFullCLs_6_1=data_log_dir+"/FullClsSTDERR_6"+options.sample+mass_str+".log";
     
     output_log_0_0=open(outFileFullCLs_0_0,'w+');
     output_log_0_1=open(outFileFullCLs_0_1,'w+');
@@ -176,7 +180,7 @@ if __name__ == '__main__':
     output_log_0_0.close();
     output_log_0_1.close();
     
-    p_Exp = subprocess.Popen(['combine',datacardsName,'-M','HybridNew','--frequentist','--grid',gridName,'-m',mass_str,'-n',nameIn,'--expectedFromGrid','0.5','-v','2'],stdout=subprocess.PIPE,stderr=output_log_1_1);
+    p_Exp = subprocess.Popen(['combine','-d',datacardsName,'-M','HybridNew','--frequentist','--grid',gridName,'-m',mass_str,'-n',nameIn,'--expectedFromGrid','0.5','-v','2'],stdout=subprocess.PIPE,stderr=output_log_1_1);
     
     
     for line in p_Exp.stdout:
@@ -188,7 +192,7 @@ if __name__ == '__main__':
     output_log_1_1.close();
     
     
-    p_1Sup = subprocess.Popen(['combine',datacardsName,'-M','HybridNew','--frequentist','--grid',gridName,'-m',mass_str,'-n',nameIn,'--expectedFromGrid','0.14','-v','2'],stdout=subprocess.PIPE,stderr=output_log_2_1);
+    p_1Sup = subprocess.Popen(['combine','-d',datacardsName,'-M','HybridNew','--frequentist','--grid',gridName,'-m',mass_str,'-n',nameIn,'--expectedFromGrid','0.14','-v','2'],stdout=subprocess.PIPE,stderr=output_log_2_1);
     
     
     for line in p_1Sup.stdout:
@@ -200,7 +204,7 @@ if __name__ == '__main__':
     output_log_2_1.close();
     
     
-    p_1Sdown = subprocess.Popen(['combine',datacardsName,'-M','HybridNew','--frequentist','--grid',gridName,'-m',mass_str,'-n',nameIn,'--expectedFromGrid','0.86'],stdout=subprocess.PIPE,stderr=output_log_3_1);
+    p_1Sdown = subprocess.Popen(['combine','-d',datacardsName,'-M','HybridNew','--frequentist','--grid',gridName,'-m',mass_str,'-n',nameIn,'--expectedFromGrid','0.86'],stdout=subprocess.PIPE,stderr=output_log_3_1);
     
     
     for line in p_1Sdown.stdout:
@@ -212,7 +216,7 @@ if __name__ == '__main__':
     output_log_3_1.close();
     
     
-    p_2Sup = subprocess.Popen(['combine',datacardsName,'-M','HybridNew','--frequentist','--grid',gridName,'-m',mass_str,'-n',nameIn,'--expectedFromGrid','0.025','-v','2'],stdout=subprocess.PIPE,stderr=output_log_4_1);
+    p_2Sup = subprocess.Popen(['combine','-d',datacardsName,'-M','HybridNew','--frequentist','--grid',gridName,'-m',mass_str,'-n',nameIn,'--expectedFromGrid','0.025','-v','2'],stdout=subprocess.PIPE,stderr=output_log_4_1);
     
     
     for line in p_2Sup.stdout:
@@ -223,7 +227,7 @@ if __name__ == '__main__':
     output_log_4_0.close();
     output_log_4_1.close();
     
-    p_2Sdown = subprocess.Popen(['combine',datacardsName,'-M','HybridNew','--frequentist','--grid',gridName,'-m',mass_str,'-n',nameIn,'--expectedFromGrid','0.975','-v','2'],stdout=subprocess.PIPE,stderr=output_log_5_1);
+    p_2Sdown = subprocess.Popen(['combine','-d',datacardsName,'-M','HybridNew','--frequentist','--grid',gridName,'-m',mass_str,'-n',nameIn,'--expectedFromGrid','0.975','-v','2'],stdout=subprocess.PIPE,stderr=output_log_5_1);
     
     
     for line in p_2Sdown.stdout:
@@ -235,7 +239,7 @@ if __name__ == '__main__':
     output_log_5_1.close();
     
     
-    p_obs = subprocess.Popen(['combine',datacardsName,'-M','HybridNew','--frequentist','--grid',gridName,'-m',mass_str,'-n',nameIn,'--expectedFromGrid','0.975','-v','2'],stdout=subprocess.PIPE,stderr=output_log_6_1);
+    p_obs = subprocess.Popen(['combine','-d',datacardsName,'-M','HybridNew','--frequentist','--grid',gridName,'-m',mass_str,'-n',nameIn,'--expectedFromGrid','0.975','-v','2'],stdout=subprocess.PIPE,stderr=output_log_6_1);
     
     
     for line in p_obs.stdout:
