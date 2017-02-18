@@ -48,9 +48,10 @@ if __name__ == '__main__':
         points+=[float(p*10.)]
         points+=[float(p*10.+5.)]
 
-
-    seed_vector=points;
-    rootFileName_vector=points;
+    i=j=0;
+    
+    seed_vector=[0.0 for i in range(len(points)) ];
+    rootFileName_vector=[0.0 for i in range(len(points)) ];
     
     i=j=0;
     
@@ -130,7 +131,7 @@ if __name__ == '__main__':
     output_log_0_0.close();
     output_log_0_1.close();
     
-    p_Exp = subprocess.Popen(['combine',datacardsName,'-M','HybridNew','--frequentist','--grid',gridName,'-m',mass_str,'-n',nameIn,'--expectedFromGrid','0.5'],stdout=subprocess.PIPE,stderr=output_log_1_1);
+    p_Exp = subprocess.Popen(['combine',datacardsName,'-M','HybridNew','--frequentist','--grid',gridName,'-m',mass_str,'-n',nameIn,'--expectedFromGrid','0.5','-v','2'],stdout=subprocess.PIPE,stderr=output_log_1_1);
     
     
     for line in p_Exp.stdout:

@@ -50,10 +50,28 @@ if __name__ == '__main__':
     gStyle.SetLegendBorderSize(0)
     '''
 
+    p_sample = subprocess.Popen(['pwd'],stdout=subprocess.PIPE);
+    
+    print "\nSearch for Sample\n"
+    for line in p_sample.stdout:
+        sys.stdout.write(line)
+        if line.find('BulkGraviton') !=-1:
+           sample="BulkGraviton"
+           
+        else:
+           sample="Higgs"
+    
+        dirString=line;
+
+        
+    p_sample.wait();
+
+    #print dirString
+    print "Used Sample: %s"%sample
+    #print sample
 
 
-
-    sample=options.sample;
+    #sample=options.sample;
     
     
     if sample=="BulkGraviton":
