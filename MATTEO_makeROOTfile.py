@@ -36,9 +36,121 @@ if __name__ == '__main__':
     mass_str= str("%.0f"%options.mass);
     nameIn=options.sample+mass_str;
     
+    datacardsName="wwlvj_"+nameIn+"_em_HP_lumi_2300_unbin.txt";
+    #wwlvj_BulkGraviton1000_em_HP_lumi_2300_unbin.txt
+    nameForPoints=nameIn;
+    #nameForPoints=sample+mass_str;
+    
+    if nameForPoints=="BulkGraviton600":
+       divide=4.
+       points=[]
+       for p in range(150,160):
+           points+=[float(p/divide)]
+           points+=[float(p/divide+0.05)]
+           points+=[float(p/1.)]
+           points+=[float(p/1.+0.5)]
+           points+=[float(p*divide)]
+           points+=[float(p*divide+5.)]
+           
+    elif nameForPoints=="BulkGraviton800":
+       '''
+       divide=5.
+       tmp=[]
+       for p in range(10,23):
+           tmp+=[float(p/divide)]
+           tmp+=[float(p/divide+0.05)]
+           tmp+=[float(p/1.)]
+           tmp+=[float(p/1.+0.5)]
+           tmp+=[float(p*divide)]
+           tmp+=[float(p*divide+5.)]
+       i=0.0;
+       points=[0.0 for i in range(len(tmp))];
+    
+    
+       i=j=0.0;
+       points[0]=0.1;
+       points[1]=0.5;
+       for i in range(len(points)-1):
+           if i:
+              points[i+1]=points[i]+0.5;
+       '''
+       divide=5.
+       tmp=[]
+       for p in range(10,25):
+           tmp+=[float(p/divide)]
+           tmp+=[float(p/divide+0.05)]
+           tmp+=[float(p/1.)]
+           tmp+=[float(p/1.+0.5)]
+           tmp+=[float(p*divide)]
+           tmp+=[float(p*divide+5.)]
+       i=0.0;
+       points=[0.0 for i in range(len(tmp))];
+    
+    
+       i=j=0.0;
+       points[0]=0.1;
+       points[1]=0.2;
+       new=30;
+       new2=10;
+       for i in range(len(points)-1):
+           if i:
+              points[i+1]=points[i]+0.2;
+       
+       for i in range(new):
+           plus=len(points)-2-new-new2;
+           if i:
+              points[plus+i+1]=points[plus+i]+0.5;
+
+       
+       for i in range(new2):
+           plus=len(points)-3-new2;
+           if i:
+              points[plus+i+1]=points[plus+i]+0.8;
 
     
     
+    
+    
+    elif nameForPoints=="BulkGraviton1000":
+       divide=4.
+       points=[]
+       for p in range(2,12):
+           points+=[float(p/divide)]
+           points+=[float(p/divide+0.05)]
+           points+=[float(p/1.)]
+           points+=[float(p/1.+0.5)]
+           points+=[float(p*divide)]
+           points+=[float(p*divide+5.)]
+         
+    
+    elif nameForPoints=="Higgs650":
+       divide=4.
+       points=[]
+       for p in range(2,12):
+           points+=[float(p/divide)]
+           points+=[float(p/divide+0.05)]
+           points+=[float(p/1.)]
+           points+=[float(p/1.+0.5)]
+           points+=[float(p*divide)]
+           points+=[float(p*divide+5.)]
+    
+    
+    
+    else:
+       divide=5.
+       points=[]
+       for p in range(10,20):
+           points+=[float(p/divide)]
+           points+=[float(p/divide+0.05)]
+           points+=[float(p/1.)]
+           points+=[float(p/1.+0.5)]
+           points+=[float(p*divide)]
+           points+=[float(p*divide+5.)]
+    
+    
+
+    
+    '''
     points=[]
     for p in range(1,10):
         points+=[float(p/10.)]
@@ -47,7 +159,7 @@ if __name__ == '__main__':
         points+=[float(p/1.+0.5)]
         points+=[float(p*10.)]
         points+=[float(p*10.+5.)]
-
+    '''
     i=j=0;
     seed_vector=[0.0 for i in range(len(points))];
     rootFileName_vector=[0.0 for j in range(len(points))];
@@ -143,6 +255,8 @@ if __name__ == '__main__':
     outFileFullCLs_6_0=data_log_dir+"/FullClsSTDOUT_6"+options.sample+mass_str+".log";   
     outFileFullCLs_6_1=data_log_dir+"/FullClsSTDERR_6"+options.sample+mass_str+".log";
     
+    SaveDataFileName="DataLimits.txt";
+    
     output_log_0_0=open(outFileFullCLs_0_0,'w+');
     output_log_0_1=open(outFileFullCLs_0_1,'w+');
     
@@ -164,12 +278,16 @@ if __name__ == '__main__':
     output_log_6_0=open(outFileFullCLs_6_0,'w+');
     output_log_6_1=open(outFileFullCLs_6_1,'w+');
     
+    SaveDataFile=open(SaveDataFileName,'w+');
+    
     command_to_make_grid=shlex.split(hadd_root_string);
     print hadd_root_string
     print command_to_make_grid
   
     
-    
+    ##################################
+    ###### PUT TOGHETHER ALL DATACARD
+    ##################################
     pd_hadd = subprocess.Popen(command_to_make_grid,stdout=subprocess.PIPE,stderr=output_log_0_1);
     
     for line in pd_hadd.stdout:
@@ -179,79 +297,148 @@ if __name__ == '__main__':
     pd_hadd.wait();  
     output_log_0_0.close();
     output_log_0_1.close();
+
+
+    ##################################
+    ###### OBSERVED LIMIT
+    ##################################
     
-    p_Exp = subprocess.Popen(['combine','-d',datacardsName,'-M','HybridNew','--frequentist','--grid',gridName,'-m',mass_str,'-n',nameIn,'--expectedFromGrid','0.5','-v','2'],stdout=subprocess.PIPE,stderr=output_log_1_1);
+    p_OBS = subprocess.Popen(['combine','-d',datacardsName,'-M','HybridNew','--frequentist','--grid',gridName,'-m',mass_str,'-n',nameIn,'-v','2'],stdout=subprocess.PIPE,stderr=output_log_1_1);
     
-    
-    for line in p_Exp.stdout:
+    limit_value=0.0;
+    for line in p_OBS.stdout:
         sys.stdout.write(line)
         output_log_1_0.write(line);
-        
-    p_Exp.wait();  
+
+        if line.find('Fit to ') !=-1:
+           print line
+           limit_value=float(line.split(" ")[4]);
+           print limit_value
+           
+           
+    p_OBS.wait();
+    SaveDataFile.write("%f\n"%limit_value);
     output_log_1_0.close();
     output_log_1_1.close();
+
+
+
     
+    ##################################
+    ###### 0.025 -> 2SIGMA UP
+    ##################################
+  
+    p_2Sup = subprocess.Popen(['combine','-d',datacardsName,'-M','HybridNew','--frequentist','--grid',gridName,'-m',mass_str,'-n',nameIn,'--expectedFromGrid','0.025','-v','2'],stdout=subprocess.PIPE,stderr=output_log_2_1);
     
-    p_1Sup = subprocess.Popen(['combine','-d',datacardsName,'-M','HybridNew','--frequentist','--grid',gridName,'-m',mass_str,'-n',nameIn,'--expectedFromGrid','0.14','-v','2'],stdout=subprocess.PIPE,stderr=output_log_2_1);
+    limit_value=0.0;
+    for line in p_2Sup.stdout:
+        sys.stdout.write(line)
+        output_log_2_0.write(line);
+        
+        if line.find('Fit to ') !=-1:
+           print line
+           limit_value=float(line.split(" ")[4]);
+           print limit_value
+           
+        
+    p_2Sup.wait(); 
+    SaveDataFile.write("%f\n"%limit_value);
+    output_log_2_0.close();
+    output_log_2_1.close();
+    
+
+    ##################################
+    ###### 0.16 -> 1SIGMA UP
+    ##################################
+    limit_value=0.0;
+    p_1Sup = subprocess.Popen(['combine','-d',datacardsName,'-M','HybridNew','--frequentist','--grid',gridName,'-m',mass_str,'-n',nameIn,'--expectedFromGrid','0.16','-v','2'],stdout=subprocess.PIPE,stderr=output_log_3_1);
     
     
     for line in p_1Sup.stdout:
         sys.stdout.write(line)
-        output_log_2_0.write(line);
+        output_log_3_0.write(line);
+        
+        if line.find('Fit to ') !=-1:
+           print line
+           limit_value=float(line.split(" ")[4]);
+           print limit_value
         
     p_1Sup.wait();  
-    output_log_2_0.close();
-    output_log_2_1.close();
+    SaveDataFile.write("%f\n"%limit_value);
+    output_log_3_0.close();
+    output_log_3_1.close();
+    
+
+
+
+    ##################################
+    ###### 0.5 -> EXPECTED VALUE
+    ##################################
+    limit_value=0.0;
+    p_EXP = subprocess.Popen(['combine','-d',datacardsName,'-M','HybridNew','--frequentist','--grid',gridName,'-m',mass_str,'-n',nameIn,'--expectedFromGrid','0.5','-v','2'],stdout=subprocess.PIPE,stderr=output_log_4_1);
     
     
-    p_1Sdown = subprocess.Popen(['combine','-d',datacardsName,'-M','HybridNew','--frequentist','--grid',gridName,'-m',mass_str,'-n',nameIn,'--expectedFromGrid','0.86'],stdout=subprocess.PIPE,stderr=output_log_3_1);
+    for line in p_EXP.stdout:
+        sys.stdout.write(line)
+        output_log_4_0.write(line);
+        
+        if line.find('Fit to ') !=-1:
+           print line
+           limit_value=float(line.split(" ")[4]);
+           print limit_value
+        
+    p_EXP.wait();  
+    SaveDataFile.write("%f\n"%limit_value);
+    output_log_4_0.close();
+    output_log_4_1.close();
+    
+    
+    ##################################
+    ###### 0.84 -> 1SIGMA DOWN
+    ##################################
+    limit_value=0.0;    
+    p_1Sdown = subprocess.Popen(['combine','-d',datacardsName,'-M','HybridNew','--frequentist','--grid',gridName,'-m',mass_str,'-n',nameIn,'--expectedFromGrid','0.84','-v','2'],stdout=subprocess.PIPE,stderr=output_log_5_1);
     
     
     for line in p_1Sdown.stdout:
         sys.stdout.write(line)
-        output_log_3_0.write(line);
-        
-    p_1Sdown.wait();  
-    output_log_3_0.close();
-    output_log_3_1.close();
-    
-    
-    p_2Sup = subprocess.Popen(['combine','-d',datacardsName,'-M','HybridNew','--frequentist','--grid',gridName,'-m',mass_str,'-n',nameIn,'--expectedFromGrid','0.025','-v','2'],stdout=subprocess.PIPE,stderr=output_log_4_1);
-    
-    
-    for line in p_2Sup.stdout:
-        sys.stdout.write(line)
-        output_log_4_0.write(line);
-        
-    p_2Sup.wait();  
-    output_log_4_0.close();
-    output_log_4_1.close();
-    
-    p_2Sdown = subprocess.Popen(['combine','-d',datacardsName,'-M','HybridNew','--frequentist','--grid',gridName,'-m',mass_str,'-n',nameIn,'--expectedFromGrid','0.975','-v','2'],stdout=subprocess.PIPE,stderr=output_log_5_1);
-    
-    
-    for line in p_2Sdown.stdout:
-        sys.stdout.write(line)
         output_log_5_0.write(line);
         
-    p_2Sdown.wait();  
+        if line.find('Fit to ') !=-1:
+           print line
+           limit_value=float(line.split(" ")[4]);
+           print limit_value
+        
+    p_1Sdown.wait();  
+    SaveDataFile.write("%f\n"%limit_value);
     output_log_5_0.close();
     output_log_5_1.close();
     
     
-    p_obs = subprocess.Popen(['combine','-d',datacardsName,'-M','HybridNew','--frequentist','--grid',gridName,'-m',mass_str,'-n',nameIn,'--expectedFromGrid','0.975','-v','2'],stdout=subprocess.PIPE,stderr=output_log_6_1);
+    
+    ##################################
+    ###### 0.975 -> 2SIGMA DOWN
+    ##################################
+    limit_value=0.0;  
+    p_2Sdown = subprocess.Popen(['combine','-d',datacardsName,'-M','HybridNew','--frequentist','--grid',gridName,'-m',mass_str,'-n',nameIn,'--expectedFromGrid','0.975','-v','2'],stdout=subprocess.PIPE,stderr=output_log_6_1);
     
     
-    for line in p_obs.stdout:
+    for line in p_2Sdown.stdout:
         sys.stdout.write(line)
         output_log_6_0.write(line);
         
-    p_obs.wait();  
+        if line.find('Fit to ') !=-1:
+           print line
+           limit_value=float(line.split(" ")[4]);
+           print limit_value
+           
+    p_2Sdown.wait();  
+    SaveDataFile.write("%f\n"%limit_value);
     output_log_6_0.close();
     output_log_6_1.close();
     
     
-    
+    SaveDataFile.close();
     
      
         

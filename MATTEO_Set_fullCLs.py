@@ -22,14 +22,14 @@ currentDir = os.getcwd();
 
 
 ## DeltaEta Cut
-DEta_values=[0.0,0.2];
-#DEta_values=[0.0,0.2,0.4,0.6,0.8,1.0,1.2,1.4,1.6,1.8,2.0,2.2,2.4,2.6,2.8,3.0];
+#DEta_values=[0.0,0.2];
+DEta_values=[0.0,0.2,0.4,0.6,0.8,1.0,1.2,1.4,1.6,1.8,2.0,2.2,2.4,2.6,2.8,3.0];
 
 
 
 # Mjj Cut
-DMjj_values=[0.0];
-#DMjj_values=[0.0,20.0,40.0,60.0,80.0,100.0,120.0,140.0,160.0,180.0,200.0,220.0,240.0,260.0,280.0,300.0,320.0,340.0];
+#DMjj_values=[0.0];
+DMjj_values=[0.0,20.0,40.0,60.0,80.0,100.0,120.0,140.0,160.0,180.0,200.0,220.0,240.0,260.0,280.0,300.0,320.0,340.0];
 
 
 
@@ -463,7 +463,7 @@ if __name__ == '__main__':
                          pd2TL2.wait();
                
 
-               datacards_dir_out_tmp22=datacards_dir_out_tmp2+"/M2_fullCLs";
+               datacards_dir_out_tmp22=datacards_dir_out_tmp2+"/FullCLs_DEF";
                if not os.path.isdir(datacards_dir_out_tmp22):
                       #os.system("mkdir "+lumi_dir);
                       pd2TL22 = subprocess.Popen(['mkdir',datacards_dir_out_tmp22]);
@@ -514,7 +514,7 @@ if __name__ == '__main__':
                   pCD = subprocess.Popen(['cp','-r',datacards_dir_in,datacards_dir_out]);
                   pCD.wait();
                   
-                  fileName1="MATTEO_runLocal_fullCLs.py";
+                  fileName1="MATTEO_runLocal_OneSample_fullCLs.py";
                   fileName2="MATTEO_makeROOTfile.py";
                   fileName3="MATTEO_HaddForFullCLs.py";
                   

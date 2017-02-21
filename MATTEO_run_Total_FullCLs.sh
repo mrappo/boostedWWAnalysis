@@ -32,6 +32,6 @@ for i in `seq 0 $((counter-1))`; do
             cd ${DirVector[$i]}
             pwd
             
-            python MATTEO_runLocal_fullCLs.py --batchMode
+            python MATTEO_runLocal_OneSample_fullCLs.py --batchMode
             cd $getBack
         done
