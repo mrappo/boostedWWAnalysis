@@ -42,21 +42,9 @@ if __name__ == '__main__':
     #nameForPoints=sample+mass_str;
     
     if nameForPoints=="BulkGraviton600":
-       divide=4.
-       points=[]
-       for p in range(150,160):
-           points+=[float(p/divide)]
-           points+=[float(p/divide+0.05)]
-           points+=[float(p/1.)]
-           points+=[float(p/1.+0.5)]
-           points+=[float(p*divide)]
-           points+=[float(p*divide+5.)]
-           
-    elif nameForPoints=="BulkGraviton800":
-       '''
        divide=5.
        tmp=[]
-       for p in range(10,23):
+       for p in range(10,25):
            tmp+=[float(p/divide)]
            tmp+=[float(p/divide+0.05)]
            tmp+=[float(p/1.)]
@@ -69,11 +57,26 @@ if __name__ == '__main__':
     
        i=j=0.0;
        points[0]=0.1;
-       points[1]=0.5;
+       points[1]=10;
+       new=30;
+       new2=10;
        for i in range(len(points)-1):
            if i:
-              points[i+1]=points[i]+0.5;
-       '''
+              points[i+1]=points[i]+7;
+       
+       for i in range(new):
+           plus=len(points)-2-new-new2;
+           if i:
+              points[plus+i+1]=points[plus+i]+10;
+
+       
+       for i in range(new2):
+           plus=len(points)-3-new2;
+           if i:
+              points[plus+i+1]=points[plus+i]+15;
+           
+    elif nameForPoints=="BulkGraviton800":
+
        divide=5.
        tmp=[]
        for p in range(10,25):
@@ -255,7 +258,7 @@ if __name__ == '__main__':
     outFileFullCLs_6_0=data_log_dir+"/FullClsSTDOUT_6"+options.sample+mass_str+".log";   
     outFileFullCLs_6_1=data_log_dir+"/FullClsSTDERR_6"+options.sample+mass_str+".log";
     
-    SaveDataFileName="DataLimits.txt";
+    SaveDataFileName="DataLimits"+options.sample+mass_str+".txt";
     
     output_log_0_0=open(outFileFullCLs_0_0,'w+');
     output_log_0_1=open(outFileFullCLs_0_1,'w+');

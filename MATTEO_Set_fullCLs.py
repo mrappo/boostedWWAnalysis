@@ -12,7 +12,8 @@ parser.add_option('--lumi', action="store",type="float",dest="lumi",default=2300
 parser.add_option('--batchMode', action="store_true",dest="batchMode",default=False)
 parser.add_option('--vbf', action="store_true",dest="vbf",default=True)
 parser.add_option('--pseudodata', action="store_true",dest="pseudodata",default=False)
-parser.add_option('--copyDC', action="store_true",dest="copyDC",default=True)
+parser.add_option('--copyDC', action="store_true",dest="copyDC",default=False)
+parser.add_option('--copyFILE', action="store_true",dest="copyFILE",default=True)
 parser.add_option('--UnBlind', action="store_true",dest="UnBlind",default=False)
 parser.add_option('--CrossCuts', action="store_true",dest="CrosCuts",default=True)
 
@@ -489,13 +490,13 @@ if __name__ == '__main__':
                
                
                
-                           
+               '''            
                if not options.copyDC:
                       if not os.path.isdir(datacards_dir_out):
                              print datacards_dir_in  
                              print "\n\nDatacard Mancanti. Uscita. \n\n"
                              sys.exit();
-        
+               '''
         
                SummaryFileName=lumi_dir+"SummaryLimitsFile.txt";
                if os.path.isfile(SummaryFileName):
@@ -513,6 +514,15 @@ if __name__ == '__main__':
    
                   pCD = subprocess.Popen(['cp','-r',datacards_dir_in,datacards_dir_out]);
                   pCD.wait();
+
+                  tmp_string=["COPY DATACARDS",
+                              " ",
+                              "COPY DC FROM: %s"%datacards_dir_in,
+                              " ",
+                              "COPY DC TO: %s"%datacards_dir_out];
+                  print_lined_string_File(tmp_string,SummaryFile);
+               
+               if options.copyFILE:
                   
                   fileName1="MATTEO_runLocal_OneSample_fullCLs.py";
                   fileName2="MATTEO_makeROOTfile.py";
@@ -553,12 +563,7 @@ if __name__ == '__main__':
                   
                   
                   
-                  tmp_string=["COPY DATACARDS",
-                              " ",
-                              "COPY DC FROM: %s"%datacards_dir_in,
-                              " ",
-                              "COPY DC TO: %s"%datacards_dir_out];
-                  print_lined_string_File(tmp_string,SummaryFile);
+
                   
                   
                   
