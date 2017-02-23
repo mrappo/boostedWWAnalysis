@@ -42,38 +42,29 @@ if __name__ == '__main__':
     #nameForPoints=sample+mass_str;
     
     if nameForPoints=="BulkGraviton600":
-       divide=5.
-       tmp=[]
-       for p in range(10,25):
-           tmp+=[float(p/divide)]
-           tmp+=[float(p/divide+0.05)]
-           tmp+=[float(p/1.)]
-           tmp+=[float(p/1.+0.5)]
-           tmp+=[float(p*divide)]
-           tmp+=[float(p*divide+5.)]
        i=0.0;
-       points=[0.0 for i in range(len(tmp))];
+       points=[0.0 for i in range(100)];
     
     
        i=j=0.0;
-       points[0]=0.1;
-       points[1]=10;
-       new=30;
-       new2=10;
-       for i in range(len(points)-1):
+       points[0]=12.1;
+       points[1]=12.5;
+       new=75;
+       new2=15;
+       for i in range(len(points)-1-new-new2):
            if i:
-              points[i+1]=points[i]+7;
+              points[i+1]=points[i]+0.4;
        
-       for i in range(new):
+       for i in range(new+1):
            plus=len(points)-2-new-new2;
            if i:
-              points[plus+i+1]=points[plus+i]+10;
+              points[plus+i+1]=points[plus+i]+0.2;
 
        
-       for i in range(new2):
+       for i in range(new2+2):
            plus=len(points)-3-new2;
            if i:
-              points[plus+i+1]=points[plus+i]+15;
+              points[plus+i+1]=points[plus+i]+0.4;
            
     elif nameForPoints=="BulkGraviton800":
 
