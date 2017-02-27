@@ -929,8 +929,52 @@ if __name__ == '__main__':
                 g=0;
                 for g in range(Ncycle):
                     
+                    if sm=="BulkGraviton":
+                       
+                       if not g:
+                          rangeValues=[0.0,400.0];
+                          rangeValues_2SU=[200.0,800.0];
+                       elif g==1:
+                          rangeValues=[0.0,40.0];
+                          rangeValues_2SU=[0.0,80.0];
+                       else:
+                          rangeValues=[0.0,100.0];
+                          rangeValues_2SU=[0.0,200.0];
+                          
+                    else:
+                       if g:
+                          rangeValues=[0.0,50.0];
+                          rangeValues_2SU=[0.0,80.0];
+                       else:
+                          rangeValues=[0.0,100.0];
+                          rangeValues_2SU=[0.0,200.0];
+                    
                     print g
                     if tmp_number_data:
+                       tmp_observed=float(tmp_data_vector[Ndata*g]);
+                       if not (tmp_observed >= rangeValues[0] and tmp_observed < rangeValues[1]):
+                              tmp_observed=0.0;
+                       
+                       tmp_2sigma_down=float(tmp_data_vector[Ndata*g+1]);
+                       if not (( tmp_2sigma_down>= rangeValues[0]) and ( tmp_2sigma_down< rangeValues[1])):
+                              tmp_2sigma_down=0.0;
+                       
+                       tmp_1sigma_down=float(tmp_data_vector[Ndata*g+2]);
+                       if not (( tmp_1sigma_down>= rangeValues[0]) and (tmp_1sigma_down < rangeValues[1])):
+                              tmp_1sigma_down=0.0;
+                       
+                       tmp_expected=float(tmp_data_vector[Ndata*g+3]);
+                       if not (( tmp_expected>= rangeValues[0]) and (tmp_expected < rangeValues[1])):
+                              tmp_expected=0.0;
+                       
+                       tmp_1sigma_up=float(tmp_data_vector[Ndata*g+4]);
+                       if not ((tmp_1sigma_up >= rangeValues[0]) and (tmp_1sigma_up < rangeValues[1])):
+                              tmp_1sigma_up=0.0;
+                       
+                       tmp_2sigma_up=float(tmp_data_vector[Ndata*g+5]);
+                       if not ((tmp_2sigma_up >= rangeValues_2SU[0]) and (tmp_2sigma_up < rangeValues_2SU[1])):
+                              tmp_2sigma_up=0.0;
+                       '''
                        #print "\n index vector: %.0f"%(Ndata*g)
                        tmp_observed=float(tmp_data_vector[Ndata*g]);
                        tmp_2sigma_up=float(tmp_data_vector[Ndata*g+1]);
@@ -938,7 +982,7 @@ if __name__ == '__main__':
                        tmp_expected=float(tmp_data_vector[Ndata*g+3]);
                        tmp_1sigma_down=float(tmp_data_vector[Ndata*g+4]);
                        tmp_2sigma_down=float(tmp_data_vector[Ndata*g+5]);
-                    
+                       '''                   
                     else:
                        tmp_observed=0.0;
                        tmp_2sigma_up=0.0;

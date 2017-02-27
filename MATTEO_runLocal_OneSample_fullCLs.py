@@ -19,7 +19,7 @@ parser.add_option('--UnBlind', action="store_true",dest="UnBlind",default=False)
 parser.add_option('--datacardDIR', action="store", type="string", dest="datacardDIR", default="")
 parser.add_option('--sample', action="store",type="string",dest="sample",default="BulkGraviton")
 parser.add_option('--oneSample', action="store_true",dest="oneSample",default=True)
-parser.add_option('--mass', action="store",type="float",dest="mass",default=600)
+parser.add_option('--mass', action="store",type="float",dest="mass",default=1000)
 (options, args) = parser.parse_args()
 
 currentDir = os.getcwd();

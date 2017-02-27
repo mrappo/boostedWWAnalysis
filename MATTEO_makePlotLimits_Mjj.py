@@ -336,11 +336,11 @@ def print_boxed_string_File(in_string_vector,out_file_name):
 
 
 ## DeltaEta Cut
-Deta=[0.0,0.2,0.4,0.6,0.8,1.0,1.2,1.4,1.6,1.8,2.0,2.2,2.4,2.6,2.8,3.0];   
+Deta=[0.0];   
 
 
 # Mjj Cut
-Mjj=[0.0,20.0,40.0,60.0,80.0,100.0,120.0,140.0,160.0,180.0,200.0,220.0,240.0,260.0,280.0,300.0,320.0,340.0];
+Mjj=[0.0,20.0,40.0,60.0,80.0,100.0,120.0,140.0,160.0,180.0,200.0,220.0,240.0,260.0,280.0,300.0,320.0,340.0,360.0,380.0,400.0,460.0,480.0];
 
 
 
@@ -388,7 +388,7 @@ if __name__ == '__main__':
        truedata_dir=Ntuple_dir_name+"/trueData"
        lumi_dir=Ntuple_dir_name+"/trueData/Lumi_%.0f_VBF/%s_Channel/%s/%s"%(options.lumi,options.channel,tmp_blind_dirName,typename);
     
-    final_dir=lumi_dir+"/PlotsExclusionLimit"+nameForFile;
+    final_dir=lumi_dir+"/PlotsExclusionLimit_MjjOnly"+nameForFile;
     if not os.path.isdir(final_dir):
            os.system("mkdir "+final_dir);    
     
@@ -414,16 +414,15 @@ if __name__ == '__main__':
     
     for sm in Sample:
          
-        #if sm=="BulkGraviton":
-        if 1==1:
+        if sm=="BulkGraviton":
         
            Ncycle=int(3);
-           tmp1_graph_1Sigma_up=ROOT.TH2D("graph_val","graph_val",Total_bin_mjj,Mjj[0],Mjj[Total_bin_mjj-1],Total_bin_deta,Deta[0],Deta[Total_bin_deta-1]);
-           tmp1_graph_2Sigma_up=ROOT.TH2D("graph_val","graph_val",Total_bin_mjj,Mjj[0],Mjj[Total_bin_mjj-1],Total_bin_deta,Deta[0],Deta[Total_bin_deta-1]);
-           tmp1_graph_1Sigma_down=ROOT.TH2D("graph_val","graph_val",Total_bin_mjj,Mjj[0],Mjj[Total_bin_mjj-1],Total_bin_deta,Deta[0],Deta[Total_bin_deta-1]);
-           tmp1_graph_2Sigma_down=ROOT.TH2D("graph_val","graph_val",Total_bin_mjj,Mjj[0],Mjj[Total_bin_mjj-1],Total_bin_deta,Deta[0],Deta[Total_bin_deta-1]);
-           tmp1_graph_observed=ROOT.TH2D("graph_val","graph_val",Total_bin_mjj,Mjj[0],Mjj[Total_bin_mjj-1],Total_bin_deta,Deta[0],Deta[Total_bin_deta-1]);
-           tmp1_graph_expected=ROOT.TH2D("graph_val","graph_val",Total_bin_mjj,Mjj[0],Mjj[Total_bin_mjj-1],Total_bin_deta,Deta[0],Deta[Total_bin_deta-1]);
+           tmp1_graph_1Sigma_up=ROOT.TH1D("graph_val","graph_val",Total_bin_mjj,Mjj[0],Mjj[Total_bin_mjj-1]);
+           tmp1_graph_2Sigma_up=ROOT.TH1D("graph_val","graph_val",Total_bin_mjj,Mjj[0],Mjj[Total_bin_mjj-1]);
+           tmp1_graph_1Sigma_down=ROOT.TH1D("graph_val","graph_val",Total_bin_mjj,Mjj[0],Mjj[Total_bin_mjj-1]);
+           tmp1_graph_2Sigma_down=ROOT.TH1D("graph_val","graph_val",Total_bin_mjj,Mjj[0],Mjj[Total_bin_mjj-1]);
+           tmp1_graph_observed=ROOT.TH1D("graph_val","graph_val",Total_bin_mjj,Mjj[0],Mjj[Total_bin_mjj-1]);
+           tmp1_graph_expected=ROOT.TH1D("graph_val","graph_val",Total_bin_mjj,Mjj[0],Mjj[Total_bin_mjj-1]);
 
            
            i=j=0;
@@ -437,16 +436,9 @@ if __name__ == '__main__':
 
                
                
-           i=j=0;
-           for i in range(Total_bin_deta):
-               tmp1_graph_1Sigma_up.GetYaxis().SetBinLabel(i+1,str("%1.3f"%(Deta[i])));
-               tmp1_graph_2Sigma_up.GetYaxis().SetBinLabel(i+1,str("%1.3f"%(Deta[i])));
-               tmp1_graph_2Sigma_down.GetYaxis().SetBinLabel(i+1,str("%1.3f"%(Deta[i])));
-               tmp1_graph_1Sigma_down.GetYaxis().SetBinLabel(i+1,str("%1.3f"%(Deta[i])));
-               tmp1_graph_observed.GetYaxis().SetBinLabel(i+1,str("%1.3f"%(Deta[i])));
-               tmp1_graph_expected.GetYaxis().SetBinLabel(i+1,str("%1.3f"%(Deta[i])));
+
         
-        rangeValues=[0.0,400.0];
+        rangeValues=[0.0,40.0];
         i=j=0;
         n_bin_mjj=n_bin_deta=0;
         for i in Deta:
@@ -498,12 +490,12 @@ if __name__ == '__main__':
                 
                 
                    
-                tmp1_graph_1Sigma_up.SetBinContent(n_bin_mjj+1,n_bin_deta+1,tmp_1sigma_up);
-                tmp1_graph_2Sigma_up.SetBinContent(n_bin_mjj+1,n_bin_deta+1,tmp_2sigma_up);
-                tmp1_graph_1Sigma_down.SetBinContent(n_bin_mjj+1,n_bin_deta+1,tmp_1sigma_down);
-                tmp1_graph_2Sigma_down.SetBinContent(n_bin_mjj+1,n_bin_deta+1,tmp_2sigma_down);
-                tmp1_graph_observed.SetBinContent(n_bin_mjj+1,n_bin_deta+1,tmp_observed);
-                tmp1_graph_expected.SetBinContent(n_bin_mjj+1,n_bin_deta+1,tmp_expected);
+                tmp1_graph_1Sigma_up.SetBinContent(n_bin_mjj+1,tmp_1sigma_up);
+                tmp1_graph_2Sigma_up.SetBinContent(n_bin_mjj+1,tmp_2sigma_up);
+                tmp1_graph_1Sigma_down.SetBinContent(n_bin_mjj+1,tmp_1sigma_down);
+                tmp1_graph_2Sigma_down.SetBinContent(n_bin_mjj+1,tmp_2sigma_down);
+                tmp1_graph_observed.SetBinContent(n_bin_mjj+1,tmp_observed);
+                tmp1_graph_expected.SetBinContent(n_bin_mjj+1,tmp_expected);
             
 
                  
@@ -527,59 +519,51 @@ if __name__ == '__main__':
 
                
                
-               
-        i=j=0;
-        for i in range(Total_bin_deta):
-               tmp1_graph_1Sigma_up.GetYaxis().SetBinLabel(i+1,str("%1.3f"%(Deta[i])));
-               tmp1_graph_2Sigma_up.GetYaxis().SetBinLabel(i+1,str("%1.3f"%(Deta[i])));
-               tmp1_graph_2Sigma_down.GetYaxis().SetBinLabel(i+1,str("%1.3f"%(Deta[i])));
-               tmp1_graph_1Sigma_down.GetYaxis().SetBinLabel(i+1,str("%1.3f"%(Deta[i])));
-               tmp1_graph_observed.GetYaxis().SetBinLabel(i+1,str("%1.3f"%(Deta[i])));
-               tmp1_graph_expected.GetYaxis().SetBinLabel(i+1,str("%1.3f"%(Deta[i])));
-               
 
-
-             
+        '''     
         # 1 Sigma Up
         tmp_canvas11=TCanvas ("Plot","Plot", 1000,600);
+        tmp_canvas11.SetGrid();
         tmp1_graph_1Sigma_up.GetXaxis().SetNdivisions(5,kFALSE);
         tmp1_graph_1Sigma_up.GetXaxis().SetTitle("M_{jj}");
         tmp1_graph_1Sigma_up.GetXaxis().CenterTitle(kTRUE);
         tmp1_graph_1Sigma_up.GetXaxis().SetTitleOffset(1.1);
-        tmp1_graph_1Sigma_up.GetYaxis().SetNdivisions(5,kFALSE);
+        #tmp1_graph_1Sigma_up.GetYaxis().SetNdivisions(5,kFALSE);
         tmp1_graph_1Sigma_up.GetYaxis().SetTitle("#Delta#eta_{jj}");
-        tmp1_graph_1Sigma_up.GetYaxis().CenterTitle(kTRUE);
-        tmp1_graph_1Sigma_up.GetYaxis().SetTitleOffset(1.3);
-        set_palette("palette",99);
+        tmp1_graph_1Sigma_up.SetFillColor(kAzure+2);
+        tmp1_graph_1Sigma_up.SetBarWidth(0.8);
+        tmp1_graph_1Sigma_up.SetBarOffset(0.1);
+        ##set_palette("palette",99);
         gStyle.SetOptStat(0);
-        gPad.SetTheta(theta_angle); # default is 30
-        gPad.SetPhi(phi_angle); # default is 30
+        ##gPad.SetTheta(theta_angle); # default is 30
+        ##gPad.SetPhi(phi_angle); # default is 30
         gPad.Update();
         canvasFileName=final_dir+"/"+nameForFile+"_1SigmaUp.pdf";
         tmp1_graph_1Sigma_up.SetTitle(nameForTitle+" 1Sigma Up");
-        tmp1_graph_1Sigma_up.Draw("COLZ");
+        tmp1_graph_1Sigma_up.Draw("b");
         tmp_canvas11.SaveAs(canvasFileName+".pdf");
         tmp_canvas11.SaveAs(canvasFileName+".root");
-        #raw_input('Press Enter to exit')
-                   
+        raw_input('Press Enter to exit')
+        
+                 
         # 2 Sigma up
         tmp_canvas12=TCanvas ("Plot","Plot", 1000,600);
         tmp1_graph_2Sigma_up.GetXaxis().SetNdivisions(5,kFALSE);
         tmp1_graph_2Sigma_up.GetXaxis().SetTitle("M_{jj}");
         tmp1_graph_2Sigma_up.GetXaxis().CenterTitle(kTRUE);
         tmp1_graph_2Sigma_up.GetXaxis().SetTitleOffset(1.1);
-        tmp1_graph_2Sigma_up.GetYaxis().SetNdivisions(5,kFALSE);
+        #tmp1_graph_2Sigma_up.GetYaxis().SetNdivisions(5,kFALSE);
         tmp1_graph_2Sigma_up.GetYaxis().SetTitle("#Delta#eta_{jj}");
-        tmp1_graph_2Sigma_up.GetYaxis().CenterTitle(kTRUE);
-        tmp1_graph_2Sigma_up.GetYaxis().SetTitleOffset(1.3);
-        set_palette("palette",99);
+        #tmp1_graph_2Sigma_up.GetYaxis().CenterTitle(kTRUE);
+        #tmp1_graph_2Sigma_up.GetYaxis().SetTitleOffset(1.3);
+        #set_palette("palette",99);
         gStyle.SetOptStat(0);
-        gPad.SetTheta(theta_angle); # default is 30
-        gPad.SetPhi(phi_angle); # default is 30
+        #gPad.SetTheta(theta_angle); # default is 30
+        #gPad.SetPhi(phi_angle); # default is 30
         gPad.Update();
         canvasFileName=final_dir+"/"+nameForFile+"_2SigmaUp";
         tmp1_graph_2Sigma_up.SetTitle(nameForTitle+" 2Sigma Up");
-        tmp1_graph_2Sigma_up.Draw("COLZ");
+        tmp1_graph_2Sigma_up.Draw("b");
         tmp_canvas12.SaveAs(canvasFileName+".pdf");
         tmp_canvas12.SaveAs(canvasFileName+".root");
         #raw_input('Press Enter to exit')        
@@ -590,18 +574,18 @@ if __name__ == '__main__':
         tmp1_graph_2Sigma_down.GetXaxis().SetTitle("M_{jj}");
         tmp1_graph_2Sigma_down.GetXaxis().CenterTitle(kTRUE);
         tmp1_graph_2Sigma_down.GetXaxis().SetTitleOffset(1.1);
-        tmp1_graph_2Sigma_down.GetYaxis().SetNdivisions(5,kFALSE);
+        #tmp1_graph_2Sigma_down.GetYaxis().SetNdivisions(5,kFALSE);
         tmp1_graph_2Sigma_down.GetYaxis().SetTitle("#Delta#eta_{jj}");
-        tmp1_graph_2Sigma_down.GetYaxis().CenterTitle(kTRUE);
-        tmp1_graph_2Sigma_down.GetYaxis().SetTitleOffset(1.3);
-        set_palette("palette",99);
+        #tmp1_graph_2Sigma_down.GetYaxis().CenterTitle(kTRUE);
+        #tmp1_graph_2Sigma_down.GetYaxis().SetTitleOffset(1.3);
+        #set_palette("palette",99);
         gStyle.SetOptStat(0);
-        gPad.SetTheta(theta_angle); # default is 30
-        gPad.SetPhi(phi_angle); # default is 30
+        #gPad.SetTheta(theta_angle); # default is 30
+        #gPad.SetPhi(phi_angle); # default is 30
         gPad.Update();
         canvasFileName=final_dir+"/"+nameForFile+"_2SigmaDown";
         tmp1_graph_2Sigma_down.SetTitle(nameForTitle+" 2Sigma Down");
-        tmp1_graph_2Sigma_down.Draw("COLZ");
+        tmp1_graph_2Sigma_down.Draw("b");
         tmp_canvas13.SaveAs(canvasFileName+".pdf");
         tmp_canvas13.SaveAs(canvasFileName+".root");
         #raw_input('Press Enter to exit')         
@@ -612,18 +596,18 @@ if __name__ == '__main__':
         tmp1_graph_1Sigma_down.GetXaxis().SetTitle("M_{jj}");
         tmp1_graph_1Sigma_down.GetXaxis().CenterTitle(kTRUE);
         tmp1_graph_1Sigma_down.GetXaxis().SetTitleOffset(1.1);
-        tmp1_graph_1Sigma_down.GetYaxis().SetNdivisions(5,kFALSE);
+        #tmp1_graph_1Sigma_down.GetYaxis().SetNdivisions(5,kFALSE);
         tmp1_graph_1Sigma_down.GetYaxis().SetTitle("#Delta#eta_{jj}");
-        tmp1_graph_1Sigma_down.GetYaxis().CenterTitle(kTRUE);
-        tmp1_graph_1Sigma_down.GetYaxis().SetTitleOffset(1.3);
-        set_palette("palette",99);
+        #tmp1_graph_1Sigma_down.GetYaxis().CenterTitle(kTRUE);
+        #tmp1_graph_1Sigma_down.GetYaxis().SetTitleOffset(1.3);
+        #set_palette("palette",99);
         gStyle.SetOptStat(0);
-        gPad.SetTheta(theta_angle); # default is 30
-        gPad.SetPhi(phi_angle); # default is 30
+        #gPad.SetTheta(theta_angle); # default is 30
+        #gPad.SetPhi(phi_angle); # default is 30
         gPad.Update();
         canvasFileName=final_dir+"/"+nameForFile+"_1SigmaDown";
         tmp1_graph_1Sigma_down.SetTitle(nameForTitle+" 1Sigma Down");
-        tmp1_graph_1Sigma_down.Draw("COLZ");
+        tmp1_graph_1Sigma_down.Draw("b");
         tmp_canvas14.SaveAs(canvasFileName+".pdf");
         tmp_canvas14.SaveAs(canvasFileName+".root");
         #raw_input('Press Enter to exit')          
@@ -634,45 +618,46 @@ if __name__ == '__main__':
         tmp1_graph_observed.GetXaxis().SetTitle("M_{jj}");
         tmp1_graph_observed.GetXaxis().CenterTitle(kTRUE);
         tmp1_graph_observed.GetXaxis().SetTitleOffset(1.1);
-        tmp1_graph_observed.GetYaxis().SetNdivisions(5,kFALSE);
+        #tmp1_graph_observed.GetYaxis().SetNdivisions(5,kFALSE);
         tmp1_graph_observed.GetYaxis().SetTitle("#Delta#eta_{jj}");
-        tmp1_graph_observed.GetYaxis().CenterTitle(kTRUE);
-        tmp1_graph_observed.GetYaxis().SetTitleOffset(1.3);
-        set_palette("palette",99);
+        #tmp1_graph_observed.GetYaxis().CenterTitle(kTRUE);
+        #tmp1_graph_observed.GetYaxis().SetTitleOffset(1.3);
+        #set_palette("palette",99);
         gStyle.SetOptStat(0);
-        gPad.SetTheta(theta_angle); # default is 30
-        gPad.SetPhi(phi_angle); # default is 30
+        #gPad.SetTheta(theta_angle); # default is 30
+        #gPad.SetPhi(phi_angle); # default is 30
         gPad.Update();
         canvasFileName=final_dir+"/"+nameForFile+"_observed";
         tmp1_graph_observed.SetTitle(nameForTitle+" Observed");
         
-        tmp1_graph_observed.Draw("COLZ");
+        tmp1_graph_observed.Draw("b");
         tmp_canvas15.SaveAs(canvasFileName+".pdf");
         tmp_canvas15.SaveAs(canvasFileName+".root");
         #raw_input('Press Enter to exit')          
-                   
+        '''           
         # Expected
         tmp_canvas16=TCanvas ("Plot","Plot", 1000,600);
+        tmp_canvas16.SetGrid();
         tmp1_graph_expected.GetXaxis().SetNdivisions(5,kFALSE);
         tmp1_graph_expected.GetXaxis().SetTitle("M_{jj}");
         tmp1_graph_expected.GetXaxis().CenterTitle(kTRUE);
         tmp1_graph_expected.GetXaxis().SetTitleOffset(1.1);
-        tmp1_graph_expected.GetYaxis().SetNdivisions(5,kFALSE);
+        #tmp1_graph_expected.GetYaxis().SetNdivisions(5,kFALSE);
         tmp1_graph_expected.GetYaxis().SetTitle("#Delta#eta_{jj}");
-        tmp1_graph_expected.GetYaxis().CenterTitle(kTRUE);
-        tmp1_graph_expected.GetYaxis().SetTitleOffset(1.3);
-        set_palette("palette",99);
+        tmp1_graph_expected.SetFillColor(kAzure+2);
+        tmp1_graph_expected.SetBarWidth(0.8);
+        tmp1_graph_expected.SetBarOffset(0.1);
         gStyle.SetOptStat(0);
-        gPad.SetTheta(theta_angle); # default is 30
-        gPad.SetPhi(phi_angle); # default is 30
+        #gPad.SetTheta(theta_angle); # default is 30
+        #gPad.SetPhi(phi_angle); # default is 30
         gPad.Update();
         canvasFileName=final_dir+"/"+nameForFile+"_expected";
         tmp1_graph_expected.SetTitle(nameForTitle+" Expected");
 
-        tmp1_graph_expected.Draw("COLZ");
+        tmp1_graph_expected.Draw("b");
         tmp_canvas16.SaveAs(canvasFileName+".pdf");
         tmp_canvas16.SaveAs(canvasFileName+".root");
         raw_input('Press Enter to exit')          
-                   
+              
                    
   

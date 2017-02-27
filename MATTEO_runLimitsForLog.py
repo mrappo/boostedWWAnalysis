@@ -43,8 +43,8 @@ if __name__ == '__main__':
        
        if options.UnBlind:
           if options.fullCLs:
-             pMKLimLog = subprocess.Popen(['python','MATTEO_LimitsCode.py','-b','--computeLimits','--channel',options.channel,'--datacardDIR',options.datacardDIR,'--makeSMLimitPlot','1','--plotLimits','1','--systematics','1','--sample',options.sample,'--vbf','TRUE','--blindObservedLine','0','--jetBin','_2jet','--fullCLs','True'],stdout=subprocess.PIPE,stderr=output_log2);
-             
+             #pMKLimLog = subprocess.Popen(['python','MATTEO_LimitsCode.py','-b','--computeLimits','--channel',options.channel,'--datacardDIR',options.datacardDIR,'--makeSMLimitPlot','1','--plotLimits','1','--systematics','1','--sample',options.sample,'--vbf','TRUE','--blindObservedLine','0','--jetBin','_2jet','--fullCLs','True'],stdout=subprocess.PIPE,stderr=output_log2);
+             pMKLimLog = subprocess.Popen(['python','MATTEO_run_fullCLs.py','--channel',options.channel,'--datacardDIR',options.datacardDIR,'--sample',options.sample],stdout=subprocess.PIPE,stderr=output_log2);
              
           elif options.mPDF:
              pMKLimLog = subprocess.Popen(['python','MATTEO_LimitsCode.py','-b','--computeLimits','--channel',options.channel,'--datacardDIR',options.datacardDIR,'--makeSMLimitPlot','1','--plotLimits','1','--systematics','1','--sample',options.sample,'--vbf','TRUE','--blindObservedLine','0','--jetBin','_2jet','--mPDF','True'],stdout=subprocess.PIPE,stderr=output_log2);
@@ -55,11 +55,12 @@ if __name__ == '__main__':
        
        else:
           if options.fullCLs:
-             pMKLimLog = subprocess.Popen(['python','MATTEO_LimitsCode.py','-b','--computeLimits','--channel',options.channel,'--datacardDIR',options.datacardDIR,'--makeSMLimitPlot','1','--plotLimits','1','--systematics','1','--sample',options.sample,'--vbf','TRUE','--blindObservedLine','1','--jetBin','_2jet','--fullCLs','True'],stdout=subprocess.PIPE,stderr=output_log2);
-             
+             #pMKLimLog = subprocess.Popen(['python','MATTEO_LimitsCode.py','-b','--computeLimits','--channel',options.channel,'--datacardDIR',options.datacardDIR,'--makeSMLimitPlot','1','--plotLimits','1','--systematics','1','--sample',options.sample,'--vbf','TRUE','--blindObservedLine','1','--jetBin','_2jet','--fullCLs','True'],stdout=subprocess.PIPE,stderr=output_log2);
+             pMKLimLog = subprocess.Popen(['python','MATTEO_run_fullCLs.py','--channel',options.channel,'--datacardDIR',options.datacardDIR,'--sample',options.sample],stdout=subprocess.PIPE,stderr=output_log2);
              
           elif options.mPDF:
-             pMKLimLog = subprocess.Popen(['python','MATTEO_LimitsCode.py','-b','--computeLimits','--channel',options.channel,'--datacardDIR',options.datacardDIR,'--makeSMLimitPlot','1','--plotLimits','1','--systematics','1','--sample',options.sample,'--vbf','TRUE','--blindObservedLine','1','--jetBin','_2jet','--mPDF','True'],stdout=subprocess.PIPE,stderr=output_log2);
+             pMKLimLog = subprocess.Popen(['python','MATTEO_LimitsCodeNew.py','-b','--channel',options.channel,'--datacardDIR',options.datacardDIR,'--makeSMLimitPlot','1','--plotLimits','1','--systematics','1','--sample',options.sample,'--vbf','TRUE','--blindObservedLine','1','--jetBin','_2jet','--mPDF','True'],stdout=subprocess.PIPE,stderr=output_log2);
+             #pMKLimLog = subprocess.Popen(['python','MATTEO_LimitsCode.py','-b','--computeLimits','--channel',options.channel,'--datacardDIR',options.datacardDIR,'--makeSMLimitPlot','1','--plotLimits','1','--systematics','1','--sample',options.sample,'--vbf','TRUE','--blindObservedLine','1','--jetBin','_2jet','--mPDF','True'],stdout=subprocess.PIPE,stderr=output_log2);
           else:
              pMKLimLog = subprocess.Popen(['python','MATTEO_LimitsCode.py','-b','--computeLimits','--channel',options.channel,'--datacardDIR',options.datacardDIR,'--makeSMLimitPlot','1','--plotLimits','1','--systematics','1','--sample',options.sample,'--vbf','TRUE','--blindObservedLine','1','--jetBin','_2jet'],stdout=subprocess.PIPE,stderr=output_log2);
           

@@ -32,6 +32,6 @@ for i in `seq 0 $((counter-1))`; do
             cd ${DirVector[$i]}
             pwd
             
-            python MATTEO_runLocal_OneSample_fullCLs.py --batchMode
+            python MATTEO_runLocal_OneSample_fullCLs.py --mass 1000 --sample Higgs --batchMode
             cd $getBack
         done

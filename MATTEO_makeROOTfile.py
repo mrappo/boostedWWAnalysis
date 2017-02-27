@@ -36,7 +36,8 @@ if __name__ == '__main__':
     mass_str= str("%.0f"%options.mass);
     nameIn=options.sample+mass_str;
     
-    datacardsName="wwlvj_"+nameIn+"_em_HP_lumi_2300_unbin.txt";
+    datacardName="wwlvj_"+nameIn+"_MATTEO.txt";
+    #datacardsName="wwlvj_"+nameIn+"_em_HP_lumi_2300_unbin.txt";
     #wwlvj_BulkGraviton1000_em_HP_lumi_2300_unbin.txt
     nameForPoints=nameIn;
     #nameForPoints=sample+mass_str;
@@ -47,113 +48,152 @@ if __name__ == '__main__':
     
     
        i=j=0.0;
-       points[0]=12.1;
-       points[1]=12.5;
-       new=75;
-       new2=15;
+       points[0]=50.0;
+       points[1]=53.0;
+       new=51;
+       new2=35;
        for i in range(len(points)-1-new-new2):
            if i:
-              points[i+1]=points[i]+0.4;
+              points[i+1]=points[i]+3.0;
        
        for i in range(new+1):
            plus=len(points)-2-new-new2;
            if i:
-              points[plus+i+1]=points[plus+i]+0.2;
+              points[plus+i+1]=points[plus+i]+2.0;
 
        
        for i in range(new2+2):
            plus=len(points)-3-new2;
            if i:
-              points[plus+i+1]=points[plus+i]+0.4;
+              points[plus+i+1]=points[plus+i]+3.0;
            
     elif nameForPoints=="BulkGraviton800":
 
-       divide=5.
-       tmp=[]
-       for p in range(10,25):
-           tmp+=[float(p/divide)]
-           tmp+=[float(p/divide+0.05)]
-           tmp+=[float(p/1.)]
-           tmp+=[float(p/1.+0.5)]
-           tmp+=[float(p*divide)]
-           tmp+=[float(p*divide+5.)]
        i=0.0;
-       points=[0.0 for i in range(len(tmp))];
+       points=[0.0 for i in range(100)];
     
     
        i=j=0.0;
        points[0]=0.1;
        points[1]=0.2;
-       new=30;
-       new2=10;
-       for i in range(len(points)-1):
+       new=51;
+       new2=35;
+       for i in range(len(points)-1-new-new2):
            if i:
               points[i+1]=points[i]+0.2;
        
-       for i in range(new):
+       for i in range(new+1):
            plus=len(points)-2-new-new2;
            if i:
-              points[plus+i+1]=points[plus+i]+0.5;
+              points[plus+i+1]=points[plus+i]+0.25;
 
        
-       for i in range(new2):
+       for i in range(new2+2):
            plus=len(points)-3-new2;
            if i:
-              points[plus+i+1]=points[plus+i]+0.8;
+              points[plus+i+1]=points[plus+i]+0.35;
 
     
     
     
     
     elif nameForPoints=="BulkGraviton1000":
-       divide=4.
-       points=[]
-       for p in range(2,12):
-           points+=[float(p/divide)]
-           points+=[float(p/divide+0.05)]
-           points+=[float(p/1.)]
-           points+=[float(p/1.+0.5)]
-           points+=[float(p*divide)]
-           points+=[float(p*divide+5.)]
+       i=0.0;
+       points=[0.0 for i in range(100)];
+    
+    
+       i=j=0.0;
+       points[0]=2.1;
+       points[1]=2.5;
+       new=50;
+       new2=20;
+       new3=10;
+       for i in range(len(points)-1-new-new2-new3):
+           if i:
+              points[i+1]=points[i]+0.35;
+       
+       for i in range(new+1):
+           plus=len(points)-2-new-new2-new3;
+           if i:
+              points[plus+i+1]=points[plus+i]+0.25;
+
+       
+       for i in range(new2+2):
+           plus=len(points)-3-new2-new3;
+           if i:
+              points[plus+i+1]=points[plus+i]+0.4;
+              
+       for i in range(new3+3):
+           plus=len(points)-4-new3;
+           if i:
+              points[plus+i+1]=points[plus+i]+0.7;
          
     
     elif nameForPoints=="Higgs650":
-       divide=4.
-       points=[]
-       for p in range(2,12):
-           points+=[float(p/divide)]
-           points+=[float(p/divide+0.05)]
-           points+=[float(p/1.)]
-           points+=[float(p/1.+0.5)]
-           points+=[float(p*divide)]
-           points+=[float(p*divide+5.)]
+       i=0.0;
+       points=[0.0 for i in range(100)];
+    
+    
+       i=j=0.0;
+       points[0]=1.1;
+       points[1]=1.5;
+       new=50;
+       new2=20;
+       new3=10;
+       for i in range(len(points)-1-new-new2-new3):
+           if i:
+              points[i+1]=points[i]+0.35;
+       
+       for i in range(new+1):
+           plus=len(points)-2-new-new2-new3;
+           if i:
+              points[plus+i+1]=points[plus+i]+0.25;
+
+       
+       for i in range(new2+2):
+           plus=len(points)-3-new2-new3;
+           if i:
+              points[plus+i+1]=points[plus+i]+0.4;
+              
+       for i in range(new3+3):
+           plus=len(points)-4-new3;
+           if i:
+              points[plus+i+1]=points[plus+i]+1.0;
     
     
     
     else:
-       divide=5.
-       points=[]
-       for p in range(10,20):
-           points+=[float(p/divide)]
-           points+=[float(p/divide+0.05)]
-           points+=[float(p/1.)]
-           points+=[float(p/1.+0.5)]
-           points+=[float(p*divide)]
-           points+=[float(p*divide+5.)]
+       i=0.0;
+       points=[0.0 for i in range(100)];
     
     
+       i=j=0.0;
+       points[0]=2.1;
+       points[1]=2.5;
+       new=40;
+       new2=20;
+       new3=10;
+       for i in range(len(points)-1-new-new2-new3):
+           if i:
+              points[i+1]=points[i]+0.6;
+       
+       for i in range(new+1):
+           plus=len(points)-2-new-new2-new3;
+           if i:
+              points[plus+i+1]=points[plus+i]+0.5;
 
+       
+       for i in range(new2+2):
+           plus=len(points)-3-new2-new3;
+           if i:
+              points[plus+i+1]=points[plus+i]+0.9;
+              
+       for i in range(new3+3):
+           plus=len(points)-4-new3;
+           if i:
+              points[plus+i+1]=points[plus+i]+1.5;
     
-    '''
-    points=[]
-    for p in range(1,10):
-        points+=[float(p/10.)]
-        points+=[float(p/10.+0.05)]
-        points+=[float(p/1.)]
-        points+=[float(p/1.+0.5)]
-        points+=[float(p*10.)]
-        points+=[float(p*10.+5.)]
-    '''
+    
     i=j=0;
     seed_vector=[0.0 for i in range(len(points))];
     rootFileName_vector=[0.0 for j in range(len(points))];
@@ -174,7 +214,7 @@ if __name__ == '__main__':
     
     
     
-    datacardName="wwlvj_"+options.sample+mass_str+"_em_HP_lumi_2300_unbin.txt";
+    #datacardName="wwlvj_"+options.sample+mass_str+"_em_HP_lumi_2300_unbin.txt";
 
 
     i=j=0;
@@ -185,7 +225,7 @@ if __name__ == '__main__':
         output_log2=open(outFileFullCLs_err,'w+');
         #print str(points[i])
         
-        pd_tmp = subprocess.Popen(['combine','-d',datacardName,'-M','HybridNew','--frequentist','--clsAcc','0','-T','100','-i','30','--singlePoint',str(points[i]),'-s',seed_vector[i],'--saveHybridResult','--saveToys','-m',mass_str,'-n',nameIn,'-v','2'],stdout=subprocess.PIPE,stderr=output_log2);
+        pd_tmp = subprocess.Popen(['combine','-d',datacardName,'-M','HybridNew','--frequentist','--clsAcc','0','-T','100','-i','30','--singlePoint',str(points[i]),'-s',seed_vector[i],'--saveHybridResult','--saveToys','-m',mass_str,'-n',nameIn,'-v','2','--rMax','1000.0'],stdout=subprocess.PIPE,stderr=output_log2);
     
     
         for line in pd_tmp.stdout:
@@ -297,7 +337,7 @@ if __name__ == '__main__':
     ###### OBSERVED LIMIT
     ##################################
     
-    p_OBS = subprocess.Popen(['combine','-d',datacardsName,'-M','HybridNew','--frequentist','--grid',gridName,'-m',mass_str,'-n',nameIn,'-v','2'],stdout=subprocess.PIPE,stderr=output_log_1_1);
+    p_OBS = subprocess.Popen(['combine','-d',datacardName,'-M','HybridNew','--frequentist','--grid',gridName,'-m',mass_str,'-n',nameIn,'-v','2'],stdout=subprocess.PIPE,stderr=output_log_1_1);
     
     limit_value=0.0;
     for line in p_OBS.stdout:
@@ -322,7 +362,7 @@ if __name__ == '__main__':
     ###### 0.025 -> 2SIGMA UP
     ##################################
   
-    p_2Sup = subprocess.Popen(['combine','-d',datacardsName,'-M','HybridNew','--frequentist','--grid',gridName,'-m',mass_str,'-n',nameIn,'--expectedFromGrid','0.025','-v','2'],stdout=subprocess.PIPE,stderr=output_log_2_1);
+    p_2Sup = subprocess.Popen(['combine','-d',datacardName,'-M','HybridNew','--frequentist','--grid',gridName,'-m',mass_str,'-n',nameIn,'--expectedFromGrid','0.025','-v','2'],stdout=subprocess.PIPE,stderr=output_log_2_1);
     
     limit_value=0.0;
     for line in p_2Sup.stdout:
@@ -345,7 +385,7 @@ if __name__ == '__main__':
     ###### 0.16 -> 1SIGMA UP
     ##################################
     limit_value=0.0;
-    p_1Sup = subprocess.Popen(['combine','-d',datacardsName,'-M','HybridNew','--frequentist','--grid',gridName,'-m',mass_str,'-n',nameIn,'--expectedFromGrid','0.16','-v','2'],stdout=subprocess.PIPE,stderr=output_log_3_1);
+    p_1Sup = subprocess.Popen(['combine','-d',datacardName,'-M','HybridNew','--frequentist','--grid',gridName,'-m',mass_str,'-n',nameIn,'--expectedFromGrid','0.16','-v','2'],stdout=subprocess.PIPE,stderr=output_log_3_1);
     
     
     for line in p_1Sup.stdout:
@@ -369,7 +409,7 @@ if __name__ == '__main__':
     ###### 0.5 -> EXPECTED VALUE
     ##################################
     limit_value=0.0;
-    p_EXP = subprocess.Popen(['combine','-d',datacardsName,'-M','HybridNew','--frequentist','--grid',gridName,'-m',mass_str,'-n',nameIn,'--expectedFromGrid','0.5','-v','2'],stdout=subprocess.PIPE,stderr=output_log_4_1);
+    p_EXP = subprocess.Popen(['combine','-d',datacardName,'-M','HybridNew','--frequentist','--grid',gridName,'-m',mass_str,'-n',nameIn,'--expectedFromGrid','0.5','-v','2'],stdout=subprocess.PIPE,stderr=output_log_4_1);
     
     
     for line in p_EXP.stdout:
@@ -391,7 +431,7 @@ if __name__ == '__main__':
     ###### 0.84 -> 1SIGMA DOWN
     ##################################
     limit_value=0.0;    
-    p_1Sdown = subprocess.Popen(['combine','-d',datacardsName,'-M','HybridNew','--frequentist','--grid',gridName,'-m',mass_str,'-n',nameIn,'--expectedFromGrid','0.84','-v','2'],stdout=subprocess.PIPE,stderr=output_log_5_1);
+    p_1Sdown = subprocess.Popen(['combine','-d',datacardName,'-M','HybridNew','--frequentist','--grid',gridName,'-m',mass_str,'-n',nameIn,'--expectedFromGrid','0.84','-v','2'],stdout=subprocess.PIPE,stderr=output_log_5_1);
     
     
     for line in p_1Sdown.stdout:
@@ -414,7 +454,7 @@ if __name__ == '__main__':
     ###### 0.975 -> 2SIGMA DOWN
     ##################################
     limit_value=0.0;  
-    p_2Sdown = subprocess.Popen(['combine','-d',datacardsName,'-M','HybridNew','--frequentist','--grid',gridName,'-m',mass_str,'-n',nameIn,'--expectedFromGrid','0.975','-v','2'],stdout=subprocess.PIPE,stderr=output_log_6_1);
+    p_2Sdown = subprocess.Popen(['combine','-d',datacardName,'-M','HybridNew','--frequentist','--grid',gridName,'-m',mass_str,'-n',nameIn,'--expectedFromGrid','0.975','-v','2'],stdout=subprocess.PIPE,stderr=output_log_6_1);
     
     
     for line in p_2Sdown.stdout:
@@ -434,6 +474,22 @@ if __name__ == '__main__':
     
     SaveDataFile.close();
     
+    plotFit_dir="PlotFit_"+nameIn;
+    if not os.path.isdir(plotFit_dir):
+           pd2=subprocess.Popen(['mkdir',plotFit_dir]);
+           pd2.wait();
+           
+    #combine -M MaxLikelihoodFit -d wwlvj_BulkGraviton800_em_HP_lumi_2300_unbin.txt --plots --out FitPlot/ --saveShapes       
+    p_FitPlot = subprocess.Popen(['combine','-d',datacardName,'-M','MaxLikelihoodFit','--plots','--out',plotFit_dir,'-m',mass_str,'--saveShapes','-v','2'],stdout=subprocess.PIPE,stderr=subprocess.PIPE);
+    
+    for li in p_FitPlot.stderr:
+        sys.stdout.write(li)
+    
+    for line in p_FitPlot.stdout:
+        sys.stdout.write(line)
+    
+    
+    p_FitPlot.wait();  
      
         
         

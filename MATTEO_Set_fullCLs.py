@@ -29,7 +29,7 @@ DEta_values=[0.0,0.2,0.4,0.6,0.8,1.0,1.2,1.4,1.6,1.8,2.0,2.2,2.4,2.6,2.8,3.0];
 
 
 # Mjj Cut
-#DMjj_values=[0.0];
+#DMjj_values=[0.0,20.0];
 DMjj_values=[0.0,20.0,40.0,60.0,80.0,100.0,120.0,140.0,160.0,180.0,200.0,220.0,240.0,260.0,280.0,300.0,320.0,340.0];
 
 
@@ -463,8 +463,11 @@ if __name__ == '__main__':
                          pd2TL2 = subprocess.Popen(['mkdir',datacards_dir_out_tmp2]);
                          pd2TL2.wait();
                
-
-               datacards_dir_out_tmp22=datacards_dir_out_tmp2+"/FullCLs_DEF";
+               ########################################
+               ######### SET FULL CLS DIR NAME
+               ########################################
+               #datacards_dir_out_tmp22=datacards_dir_out_tmp2+"/prova";
+               datacards_dir_out_tmp22=datacards_dir_out_tmp2+"/FullCLs_MATTEO";
                if not os.path.isdir(datacards_dir_out_tmp22):
                       #os.system("mkdir "+lumi_dir);
                       pd2TL22 = subprocess.Popen(['mkdir',datacards_dir_out_tmp22]);
