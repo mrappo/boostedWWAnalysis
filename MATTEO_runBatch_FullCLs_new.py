@@ -9,15 +9,13 @@ import os.path
 import shlex
 parser = OptionParser()
 
-parser.add_option('-c', '--channel',action="store",type="string",dest="channel",default="em")
 parser.add_option('--ntuple', action="store",type="string",dest="ntuple",default="WWTree_22sep_jecV7_lowmass")
 parser.add_option('--sample', action="store",type="string",dest="sample",default="BulkGraviton")
-parser.add_option('--lumi', action="store",type="float",dest="lumi",default=2300.0)
-parser.add_option('--point', action="store",type="float",dest="point",default=10)
 parser.add_option('--mass', action="store",type="float",dest="mass",default=800)
-parser.add_option('--datacard', action="store",type="string",dest="datacard",default="")
-parser.add_option('--seed', action="store",type="string",dest="seed",default="100")
-parser.add_option('--datacardDIR', action="store", type="string", dest="datacardDIR", default="")
+parser.add_option('--seedJ', action="store",type="float",dest="seedJ",default=1)
+parser.add_option('--divide', action="store",type="float",dest="divide",default=4.0)
+parser.add_option('--point', action="store",type="float",dest="point",default=10)
+parser.add_option('--seedI', action="store",type="float",dest="seedI",default=10)
 
 (options, args) = parser.parse_args()
 
@@ -36,12 +34,12 @@ if __name__ == '__main__':
     mass_str= str("%.0f"%options.mass);
     nameIn=options.sample+mass_str;
     
-    datacardsName="wwlvj_"+nameIn+"_em_HP_lumi_2300_unbin.txt";
+    datacardName="wwlvj_"+nameIn+"_MATTEO.txt";
+    #datacardsName="wwlvj_"+nameIn+"_em_HP_lumi_2300_unbin.txt";
     #wwlvj_BulkGraviton1000_em_HP_lumi_2300_unbin.txt
     nameForPoints=nameIn;
     #nameForPoints=sample+mass_str;
-    
-    
+
     if nameForPoints=="BulkGraviton600":
        i=0.0;
        points=[0.0 for i in range(100)];
@@ -192,32 +190,38 @@ if __name__ == '__main__':
            plus=len(points)-4-new3;
            if i:
               points[plus+i+1]=points[plus+i]+1.5;
-    
-    
 
-    
 
+
+    log_dir="LogROOTfile";
+    if not os.path.isdir(log_dir):
+           pd1=subprocess.Popen(['mkdir',log_dir]);
+           pd1.wait();
+
+    seed=int(1000000000.0 + int((options.seedI+int(1))*int(1000.0)) + int(options.seedJ) );
+    outFileFullCLs=log_dir+"/FullClsSTDOUT"+options.sample+mass_str+str(seed)+".log";   
+    outFileFullCLs_err=log_dir+"/FullClsSTDERR"+options.sample+mass_str+str(seed)+".log";
+    output_log1=open(outFileFullCLs,'w+');
+    output_log2=open(outFileFullCLs_err,'w+');
+    #print str(points[i])
     i=j=0;
-    tmp_point=[0.0 for i in range(len(points))];
-    rootFileName_vector=[0.0 for j in range(len(points))];
+    for j in range(int(options.divide)): 
+                   
+                   tmp_point=str(points[int(options.seedI)]);
+                   tmp_name=nameIn+"P"+str("%.3f"%points[int(options.seedI)]);
+                   tmp_seed=int(1000000000.0 + int((options.seedI+int(1))*int(1000.0)) + int(options.seedJ)+j );
+                   
+                   #tmp_seed=int(options.seed+j+1.0);
+                   print "Real Seed: %.0f\n"%tmp_seed;        
+                   pd_tmp = subprocess.Popen(['combine','-d',datacardName,'-M','HybridNew','--frequentist','--clsAcc','0','-T','100','-i','30','--singlePoint',str(points[int(options.seedI)]),'-s',str(tmp_seed),'--saveHybridResult','--saveToys','-m',mass_str,'-n',tmp_name,'-v','2','--rMax','1000.0'],stdout=subprocess.PIPE,stderr=output_log2);
     
-    i=j=0;
     
-    for i in range(len(points)):
-        tmp_point[i]=points[i];
+                   for line in pd_tmp.stdout:
+                       sys.stdout.write(line)
+                       output_log1.write(line);
         
-    tmp_point.sort()
-    for i in range(len(points)):
-        print "%.0f %f"%(i,tmp_point[i]);
-    
-    
-    
-    
-#combine -d wwlvj_BulkGraviton1000_em_HP_lumi_2300_unbin.txt -M HybridNew --frequentist --clsAcc 0 -T 100 -i 30 --singlePoint 23.1 -s 40123 --saveHybridResult --saveToys -m 1000 -n BulkGraviton1000 -v 2 --rMax 30.0
-     
-# combine -M MaxLikelihoodFit -d wwlvj_BulkGraviton800_em_HP_lumi_2300_unbin.txt --plots --out FitPlot/ --saveShapes
-
-#combine -M MaxLikelihoodFit -d wwlvj_BulkGraviton800_em_HP_lumi_2300_unbin.txt --plots
-    
-#combine -d wwlvj_BulkGraviton800_em_HP_lumi_2300_unbin.txt -M HybridNew --frequentist --grid GRID_BulkGraviton600.root -m 600 -n BulkGraviton600 --expectedFromGrid 0.5 -v 2 --plots
-    
+                   pd_tmp.wait(); 
+                   
+                   
+    output_log1.close();
+    output_log2.close();
