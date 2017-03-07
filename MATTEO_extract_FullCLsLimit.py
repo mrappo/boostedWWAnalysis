@@ -194,8 +194,8 @@ if __name__ == '__main__':
            if i:
               points[plus+i+1]=points[plus+i]+1.5;
     
-    outSeedFileName="%s_SeedFile.txt"%nameIn;
-    outSeedFile=open(outSeedFileName,'w+');
+    #outSeedFileName="%s_SeedFile.txt"%nameIn;
+    #outSeedFile=open(outSeedFileName,'w+');
     i=j=0;
     NumberToys=100;
     seed_vector=[[0.0 for j in range(NumberToys)] for i in range(len(points))];
@@ -209,53 +209,22 @@ if __name__ == '__main__':
         j=0;
         for j in range(NumberToys):
             seed_vector[i][j]=int(1000000000.0 + int((i+int(1))*int(1000.0)) + int(j) );
-            outSeedFile.write("%.0f\n"%seed_vector[i][j]);
+            #outSeedFile.write("%.0f\n"%seed_vector[i][j]);
             #print "points: %.0f   Toys: %.0f    Seed: %.0f"%(i,j,seed_vector[i][j])
     
-    outSeedFile.close();
+    #outSeedFile.close();
     
     log_dir="LogROOTfile";
     if not os.path.isdir(log_dir):
            pd1=subprocess.Popen(['mkdir',log_dir]);
            pd1.wait();
-    
-  
-   
 
-    
-    i=j=0;
-    
-    
-    for i in range(len(points)):
-        for j in range(NumberToys):
-        
-            #BulkGraviton1000.HybridNew.mH1000.10010.root
-            rootFileName_vector[i][j]="higgsCombine"+nameIn+".HybridNew.mH"+mass_str+"."+str(seed_vector[i][j])+".root"
-        
-        
-    
-    gridName="GRID_"+nameIn+".root";    
-    hadd_root_string="hadd -f "+gridName;
-    i=j=0;
-    for i in range(len(points)):
-        for j in range(NumberToys):
-            if os.path.isfile(rootFileName_vector[i][j]):
-               if (os.path.getsize(rootFileName_vector[i][j]) > 0): 
-                   hadd_root_string=hadd_root_string+" "+rootFileName_vector[i][j];
-                       
-               else:
-                   pass;
-            else:
-               pass;
-           
-           
+
     data_log_dir="LogDATAfile";
     if not os.path.isdir(data_log_dir):
            pd1=subprocess.Popen(['mkdir',data_log_dir]);
-           pd1.wait();
-           
-    outFileFullCLs_0_0=data_log_dir+"/FullClsSTDOUT_hadd"+options.sample+mass_str+".log";   
-    outFileFullCLs_0_1=data_log_dir+"/FullClsSTDERR_hadd"+options.sample+mass_str+".log";
+           pd1.wait();    
+
     
     outFileFullCLs_1_0=data_log_dir+"/FullClsSTDOUT_1"+options.sample+mass_str+".log";   
     outFileFullCLs_1_1=data_log_dir+"/FullClsSTDERR_1"+options.sample+mass_str+".log";
@@ -274,12 +243,10 @@ if __name__ == '__main__':
 
 
     outFileFullCLs_6_0=data_log_dir+"/FullClsSTDOUT_6"+options.sample+mass_str+".log";   
-    outFileFullCLs_6_1=data_log_dir+"/FullClsSTDERR_6"+options.sample+mass_str+".log";
-    
-    SaveDataFileName="DataLimits"+options.sample+mass_str+".txt";
-    
-    output_log_0_0=open(outFileFullCLs_0_0,'w+');
-    output_log_0_1=open(outFileFullCLs_0_1,'w+');
+    outFileFullCLs_6_1=data_log_dir+"/FullClsSTDERR_6"+options.sample+mass_str+".log";  
+
+
+
     
     output_log_1_0=open(outFileFullCLs_1_0,'w+');
     output_log_1_1=open(outFileFullCLs_1_1,'w+');
@@ -298,17 +265,88 @@ if __name__ == '__main__':
     
     output_log_6_0=open(outFileFullCLs_6_0,'w+');
     output_log_6_1=open(outFileFullCLs_6_1,'w+');
+
     
-    SaveDataFile=open(SaveDataFileName,'w+');
+    i=j=0;
     
-    command_to_make_grid=shlex.split(hadd_root_string);
-    print hadd_root_string
-    print command_to_make_grid
-  
     
-    ##################################
+    for i in range(len(points)):
+        for j in range(NumberToys):
+        
+
+            rootFileName_vector[i][j]="higgsCombine"+nameIn+"P"+str("%.3f"%points[i])+".HybridNew.mH"+mass_str+"."+str(seed_vector[i][j])+".root"
+            #print rootFileName_vector[i][j]
+
+    ####################################################
+    ######## MAKE GRID OF SINGLE R POINT
+    ####################################################
+    gridName_Vector=[0.0 for i in range(len(points))];
+    i=j=0;
+    for i in range(len(points)):
+        outFileFullCLs_0_0=data_log_dir+"/FullClsSTDOUT_hadd"+options.sample+mass_str+"P"+str("%.3f"%points[i])+".log";   
+        outFileFullCLs_0_1=data_log_dir+"/FullClsSTDERR_hadd"+options.sample+mass_str+"P"+str("%.3f"%points[i])+".log";
+        
+        output_log_0_0=open(outFileFullCLs_0_0,'w+');
+        output_log_0_1=open(outFileFullCLs_0_1,'w+');
+        
+
+        gridName_tmp="GRID_"+nameIn+"P"+str("%.3f"%points[i])+".root";   
+        hadd_root_string_tmp="hadd -f "+gridName_tmp;
+        gridName_Vector[i]=gridName_tmp;
+        for j in range(NumberToys):
+            if os.path.isfile(rootFileName_vector[i][j]):
+               if (os.path.getsize(rootFileName_vector[i][j]) > 0): 
+                   hadd_root_string_tmp=hadd_root_string_tmp+" "+rootFileName_vector[i][j];
+                       
+               else:
+                   pass;
+            else:
+               pass;
+        
+        ###### PUT TOGHETHER ALL DATACARD
+        
+        print hadd_root_string_tmp
+        command_to_make_grid_tmp=shlex.split(hadd_root_string_tmp);
+        pd_hadd = subprocess.Popen(command_to_make_grid_tmp,stdout=subprocess.PIPE,stderr=output_log_0_1);
+    
+        for line in pd_hadd.stdout:
+            sys.stdout.write(line)
+            output_log_0_0.write(line);
+        
+        pd_hadd.wait();  
+        output_log_0_0.close();
+        output_log_0_1.close();
+   
+    
+    ####################################################
+    ######## MAKE GRID OF ALL R POINT
+    ####################################################
+    gridName="GRID_"+nameIn+".root";    
+    hadd_root_string="hadd -f "+gridName;
+    
+        
+    outFileFullCLs_0_0=data_log_dir+"/FullClsSTDOUT_hadd_ALL"+options.sample+mass_str+".log";   
+    outFileFullCLs_0_1=data_log_dir+"/FullClsSTDERR_hadd_ALL"+options.sample+mass_str+".log";
+        
+    output_log_0_0=open(outFileFullCLs_0_0,'w+');
+    output_log_0_1=open(outFileFullCLs_0_1,'w+');
+    
+    gridName="GRID_ALL"+nameIn+".root";    
+    hadd_root_string="hadd -f "+gridName;
+
+    for i in range(len(points)):
+        if os.path.isfile(gridName_Vector[i]):
+           if (os.path.getsize(gridName_Vector[i]) > 0): 
+               hadd_root_string=hadd_root_string+" "+gridName_Vector[i];
+                       
+           else:
+               pass;
+        else:
+           pass;
+        
+
     ###### PUT TOGHETHER ALL DATACARD
-    ##################################
+    command_to_make_grid=shlex.split(hadd_root_string);
     pd_hadd = subprocess.Popen(command_to_make_grid,stdout=subprocess.PIPE,stderr=output_log_0_1);
     
     for line in pd_hadd.stdout:
@@ -317,7 +355,16 @@ if __name__ == '__main__':
         
     pd_hadd.wait();  
     output_log_0_0.close();
-    output_log_0_1.close();
+    output_log_0_1.close();     
+
+           
+
+    
+    SaveDataFileName="DataLimits"+options.sample+mass_str+".txt";
+    SaveDataFile=open(SaveDataFileName,'w+');
+    
+
+
 
 
     ##################################
@@ -477,7 +524,7 @@ if __name__ == '__main__':
     
     
     p_FitPlot.wait();  
-
+    
         
         
 

@@ -52,10 +52,11 @@ if __name__ == '__main__':
     
     if options.oneSample:
        if sample==options.sample:
-
+                
+                
                 mass=options.mass;
                 mass_str=str("%.0f"%mass);
-                
+                print "Using Sample: %s%s"%(sample,mass_str)
                 
                 
                 if options.batchMode:

@@ -12,25 +12,25 @@ parser.add_option('--lumi', action="store",type="float",dest="lumi",default=2300
 parser.add_option('--batchMode', action="store_true",dest="batchMode",default=False)
 parser.add_option('--vbf', action="store_true",dest="vbf",default=True)
 parser.add_option('--pseudodata', action="store_true",dest="pseudodata",default=False)
-parser.add_option('--copyDC', action="store_true",dest="copyDC",default=True)
+parser.add_option('--copyDC', action="store_true",dest="copyDC",default=False)
 parser.add_option('--copyFILE', action="store_true",dest="copyFILE",default=True)
 parser.add_option('--UnBlind', action="store_true",dest="UnBlind",default=False)
 parser.add_option('--CrossCuts', action="store_true",dest="CrosCuts",default=True)
-
+parser.add_option('--renameDC', action="store_true",dest="renameDC",default=False)
 (options, args) = parser.parse_args()
 
 currentDir = os.getcwd();
 
 
 ## DeltaEta Cut
-DEta_values=[0.0,0.2];
-#DEta_values=[0.0,0.2,0.4,0.6,0.8,1.0,1.2,1.4,1.6,1.8,2.0,2.2,2.4,2.6,2.8,3.0];
+#DEta_values=[0.0,0.2];
+DEta_values=[0.0,0.2,0.4,0.6,0.8,1.0,1.2,1.4,1.6,1.8,2.0,2.2,2.4,2.6,2.8,3.0];
 
 
 
 # Mjj Cut
-DMjj_values=[0.0,20.0];
-#DMjj_values=[0.0,20.0,40.0,60.0,80.0,100.0,120.0,140.0,160.0,180.0,200.0,220.0,240.0,260.0,280.0,300.0,320.0,340.0];
+#DMjj_values=[0.0];
+DMjj_values=[0.0,20.0,40.0,60.0,80.0,100.0,120.0,140.0,160.0,180.0,200.0,220.0,240.0,260.0,280.0,300.0,320.0,340.0];
 
 
 
@@ -463,11 +463,8 @@ if __name__ == '__main__':
                          pd2TL2 = subprocess.Popen(['mkdir',datacards_dir_out_tmp2]);
                          pd2TL2.wait();
                
-               ########################################
-               ######### SET FULL CLS DIR NAME
-               ########################################
-               datacards_dir_out_tmp22=datacards_dir_out_tmp2+"/prova";
-               #datacards_dir_out_tmp22=datacards_dir_out_tmp2+"/FullCLs_MATTEO";
+
+               datacards_dir_out_tmp22=datacards_dir_out_tmp2+"/Lumi_Check";
                if not os.path.isdir(datacards_dir_out_tmp22):
                       #os.system("mkdir "+lumi_dir);
                       pd2TL22 = subprocess.Popen(['mkdir',datacards_dir_out_tmp22]);
@@ -524,6 +521,43 @@ if __name__ == '__main__':
                               " ",
                               "COPY DC TO: %s"%datacards_dir_out];
                   print_lined_string_File(tmp_string,SummaryFile);
+                  
+                  
+                  
+                  
+                  
+                  
+               ### RENAME DATACARD
+               if options.renameDC:
+                  for sm in Sample:
+                      if sm=="BulkGraviton":
+                         masses_value=["600","800","1000"];
+                      else:      
+                         masses_value=["650","1000"];
+                      
+                      for mass in masses_value:
+                          if options.channel=="em":
+                     
+                             datacard_file_in=datacards_dir_out+"/cards_%s_%s_VBF/%s/wwlvj_%s%s_%s_%s_lumi_%s_unbin.txt"%(options.channel,options.category,sm,sm,mass,options.channel,options.category,lumi_str)
+                             datacard_file_out=datacards_dir_out+"/cards_%s_%s_VBF/%s/wwlvj_BulkGraviton_newxsec%s_%s_2jet_HP_unbin.txt"%(options.channel,options.category,sm,mass,options.channel)
+                       
+                          else:
+               
+                             datacard_file_in=datacards_dir_out+"/cards_%s_%s_VBF/%s/wwlvj_%s%s_%s_%s_lumi_%s_unbin.txt"%(options.channel,options.category,sample,sample,mass,options.channel,options.category,lumi_str)
+                             datacard_file_out=datacards_dir_out+"/cards_%s_%s_VBF/%s/wwlvj_BulkGraviton_newxsec%s_%s_HP_unbin.txt"%(options.channel,options.category,sample,mass,options.channel)
+                          
+                       
+              
+               
+                          pRNDC = subprocess.Popen(['cp',datacard_file_in,datacard_file_out]);
+                          pRNDC.wait();
+                       
+                          tmp_string=["RENAME DATACARDS",
+                                      " ",
+                                      "Datacard IN: %s"%datacard_file_in,
+                                      " ",
+                                      "Datacard OUT: %s"%datacard_file_out];
+                          print_lined_string_File(tmp_string,SummaryFile);
                
                if options.copyFILE:
                   
@@ -582,10 +616,15 @@ if __name__ == '__main__':
   
   
   
+#python MATTEO_LimitsCode.py -b --computeLimits --channel em --datacardDIR Ntuple_WWTree_22sep_jecV7_lowmass/trueData/Lumi_2300_VBF/em_Channel/Blind/Lumi_Check/DEta1.000_Mjj_100/cards_em_HP_VBF/BulkGraviton --makeSMLimitPlot 1 --plotLimits 1 --systematics 1 --sample BulkGraviton --vbf TRUE --blindObservedLine 0 --jetBin _2jet --freezeNuisance lumiScale --setPhysicsModelParameters lumiScale=2 
   
-  
-  
- 
+#combine -M Asymptotic --minimizerAlgo Minuit2 --minosAlgo stepping -m 800 -v 2 -S 0 -d Ntuple_WWTree_22sep_jecV7_lowmass/trueData/Lumi_2300_VBF/em_Channel/Blind/Lumi_Check/DEta1.000_Mjj_100/cards_em_HP_VBF/BulkGraviton/wwlvj_BulkGraviton800_em_HP_lumi_2300_unbin.txt -t -1 --freezeNuisances lumiScale --setPhysicsModelParameters lumiScale=2 
+
+#Invalid options: option '--freezeNuisance' is ambiguous and matches '--freezeNuisanceGroups', and '--freezeNuisances'
+
+
+
+#combine -M Asymptotic --minimizerAlgo Minuit2 --minosAlgo stepping -n wwlvj_BulkGraviton_newxsec%03d_%s%s_HP_unbin -m %03d -d wwlvj_BulkGraviton_newxsec%03d_%s%s_HP_unbin.txt %s -v 2 -S 0
     
 # hadd -f higgisCombin_mu_unbin.root higgsCombinemuHWWlvjj_unbin.Asymptotic.mH600.root higgsCombinemuHWWlvjj_unbin.Asymptotic.mH700.root higgsCombinemuHWWlvjj_unbin.Asymptotic.mH800.root higgsCombinemuHWWlvjj_unbin.Asymptotic.mH900.root higgsCombinemuHWWlvjj_unbin.Asymptotic.mH1000.root  
     
